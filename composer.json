@@ -1,30 +1,31 @@
 {
   "name": "joycezhang/laravellib",
-  "description": "一个php工具包",
   "type": "library",
-  "license": "MIT",
-  "version": "1.0.0",
+  "description": "一个php工具包，基于laravel:^5.0.*",
+  "version" : "1.0.0",
   "keywords": [
-    "laravel6.0.*",
-    "tp6",
+    "laravel",
     "miniprogram",
     "poster"
   ],
+  "require": {
+    "php": ">=7.0"
+  },
+  "require-dev": {
+    "php": ">=7.0"
+  },
+  "license": "MIT",
   "authors": [
     {
       "name": "joycezhangw",
       "email": "zhangwei762@163.com"
     }
   ],
-  "minimum-stability": "dev",
-  "require": {
-    "php": ">=7.0"
-  },
-  "require-dev": {
-  },
   "autoload": {
     "psr-4": {
       "JoyceZ\\LaravelLib\\": "src/"
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
