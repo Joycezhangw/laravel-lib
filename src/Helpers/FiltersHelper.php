@@ -1,10 +1,23 @@
 <?php
+// +----------------------------------------------------------------------
+// | 通用类包
+// +----------------------------------------------------------------------
+// | Copyright (c) 2020 http://www.hmall.com.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: joyecZhang <zhangwei762@163.com>
+// +----------------------------------------------------------------------
 
+declare (strict_types=1);
 
 namespace JoyceZ\LaravelLib\Helpers;
 
-
-
+/**
+ * 字符串过滤类
+ * Class FiltersHelper
+ * @package JoyceZ\LaravelLib\Helpers
+ */
 class FiltersHelper
 {
     /**
@@ -16,7 +29,7 @@ class FiltersHelper
     {
 
         $pregRule = "/<[img|IMG].*?src=[\'|\"](.*?(?:[\.jpg|\.jpeg|\.png|\.gif|\.bmp]))[\'|\"].*?[\/]?>/";
-        $content = '';//preg_replace($pregRule, '<img src="' . asset('${1}') . '" style="max-width:100%;height:auto;display:block">', $html_content);
+        $content = preg_replace($pregRule, '<img src="' . asset('${1}') . '" style="max-width:100%;height:auto;display:block">', $html_content);
 
         return $content;
     }
