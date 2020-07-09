@@ -76,7 +76,7 @@ abstract class BaseRepository implements BaseInterface
     public function all(array $condition = ['1' => 1], $columns = ['*'], string $orderBy = '', string $sortBy = 'asc')
     {
         $orderBy = $orderBy===''  ? $this->model->getKeyName():$orderBy;
-        return $this->model->where($condition)->orderBy($orderBy, $sortBy)->all($columns);
+        return $this->model->where($condition)->orderBy($orderBy, $sortBy)->get($columns);
     }
 
     /**
