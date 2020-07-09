@@ -41,7 +41,7 @@ abstract class BaseRepository implements BaseInterface
      */
     public function getByPkId(int $id)
     {
-        return $this->model->find();
+        return $this->model->find($id);
     }
 
     /**
