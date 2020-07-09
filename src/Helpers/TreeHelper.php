@@ -34,7 +34,9 @@ class TreeHelper
         foreach ($list as $v) {
             if ($v[$pk] == $id) {
                 $tree[] = $v;
-                $tree = array_merge(self::getParents($list, $v[$pid]), $tree);
+                if (intval($v[$pid]) !== 0) {
+                    $tree = array_merge(self::getParents($list, $v[$pid]), $tree);
+                }
             }
         }
         return $tree;
