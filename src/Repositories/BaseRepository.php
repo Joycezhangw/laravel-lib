@@ -73,9 +73,9 @@ abstract class BaseRepository implements BaseInterface
      * @param string $sortBy 排序方式
      * @return mixed
      */
-    public function all(array $condition = ['1' => 1], $columns = ['*'], string $orderBy = 'id', string $sortBy = 'asc')
+    public function all(array $condition = ['1' => 1], $columns = ['*'], string $orderBy = '', string $sortBy = 'asc')
     {
-        $orderBy = $orderBy ?? $this->model->getKeyName();
+        $orderBy = $orderBy===''  ? $this->model->getKeyName():$orderBy;
         return $this->model->where($condition)->orderBy($orderBy, $sortBy)->all($columns);
     }
 
