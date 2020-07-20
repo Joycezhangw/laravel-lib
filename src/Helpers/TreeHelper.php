@@ -231,4 +231,39 @@ class TreeHelper
         }
         return $tree;
     }
+
+    /**
+     * 无限级分类，将索引改成主键id值为索引
+     * @param array $list
+     * @param int $root
+     * @param string $pk
+     * @param string $pid
+     * @param string $child
+     * @return array
+     */
+    public static function listToTreeKeyPk(array $list, $root = 0, $pk = 'id', $pid = 'pid', $child = 'children'): array
+    {
+        // 创建Tree
+        $tree = array();
+        if (is_array($list)) {
+            // 创建基于主键的数组引用
+            $refer = array();
+            foreach ($list as $key => $data) {
+                $refer[$data[$pk]] =& $list[$key];
+            }
+            foreach ($list as $key => $data) {
+                // 判断是否存在parent
+                $parentId = $data[$pid];
+                if ($root == $parentId) {
+                    $tree[$data[$pk]] =& $list[$key];
+                } else {
+                    if (isset($refer[$parentId])) {
+                        $parent =& $refer[$parentId];
+                        $parent[$child][$data[$pk]] =& $list[$key];
+                    }
+                }
+            }
+        }
+        return $tree;
+    }
 }
