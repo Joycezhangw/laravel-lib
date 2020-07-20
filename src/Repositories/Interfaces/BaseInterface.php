@@ -82,7 +82,7 @@ interface BaseInterface
      * @param int $id
      * @return bool
      */
-    public function deleteByPkId(int $id): bool;
+    public function doDeleteByPkId(int $id): bool;
 
     /**
      * 根据主键，更新某个字段，模型要指定主键名

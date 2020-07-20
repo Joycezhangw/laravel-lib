@@ -130,7 +130,7 @@ abstract class BaseRepository implements BaseInterface
      * @param int $id 主键id值
      * @return bool
      */
-    public function deleteByPkId(int $id): bool
+    public function doDeleteByPkId(int $id): bool
     {
         $pkId = $this->model->getKeyName() ?? 'id';
         return $this->model->where($pkId, $id)->delete();
