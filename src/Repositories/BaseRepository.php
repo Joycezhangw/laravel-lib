@@ -126,7 +126,7 @@ abstract class BaseRepository implements BaseInterface
     }
 
     /**
-     * 根据主键删除id，物理删除
+     * 根据主键删除id，物理删除。返回的是影响行数
      * @param int $id 主键值
      * @return int
      */
