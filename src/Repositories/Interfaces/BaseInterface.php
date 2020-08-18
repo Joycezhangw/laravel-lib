@@ -82,7 +82,7 @@ interface BaseInterface
      * @param int $id 主键值
      * @return int
      */
-    public function doDeleteByPkId(int $id): int ;
+    public function doDeleteByPkId(int $id): int;
 
     /**
      * 根据主键，更新某个字段，模型要指定主键名
@@ -101,8 +101,26 @@ interface BaseInterface
      *     2.不建议用 count() 来判断数据存不存在，请使用find 或者 first 来判断数据是否存在
      *
      * @param array $condition 查询条件
-     * @param string $columns  统计字段
+     * @param string $columns 统计字段
      * @return int
      */
     public function count(array $condition = [], string $columns = ''): int;
+
+    /**
+     * 指定某个字段值自增
+     * @param array $condition
+     * @param string $filedName
+     * @param int $amount
+     * @return mixed
+     */
+    public function increment(array $condition, string $filedName, int $amount = 1);
+
+    /**
+     * 指定某个字段递减
+     * @param array $condition
+     * @param string $filedName
+     * @param int $amount
+     * @return mixed
+     */
+    public function decrement(array $condition, string $filedName, int $amount = 1);
 }

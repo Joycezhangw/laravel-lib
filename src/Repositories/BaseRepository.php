@@ -75,7 +75,7 @@ abstract class BaseRepository implements BaseInterface
      */
     public function all(array $condition = [], $columns = ['*'], string $orderBy = '', string $sortBy = 'asc')
     {
-        $orderBy = $orderBy===''  ? $this->model->getKeyName():$orderBy;
+        $orderBy = $orderBy === '' ? $this->model->getKeyName() : $orderBy;
         return $this->model->where($condition)->orderBy($orderBy, $sortBy)->get($columns);
     }
 
@@ -153,6 +153,27 @@ abstract class BaseRepository implements BaseInterface
         return $this->model->where($condition)->count($pkField);
     }
 
+    /**
+     * 根据条件，指定某个字段值递增
+     * @param array $condition 条件
+     * @param string $filedName 指定字段名
+     * @param int $amount 自增数量
+     * @return mixed
+     */
+    public function increment(array $condition, string $filedName, int $amount = 1)
+    {
+        return $this->model->where($condition)->increment($filedName, $amount);
+    }
 
-
+    /**
+     * 根据条件，指定某个字段值递减
+     * @param array $condition 条件
+     * @param string $filedName 指定字段名
+     * @param int $amount 递减数量
+     * @return mixed
+     */
+    public function decrement(array $condition, string $filedName, int $amount = 1)
+    {
+        return $this->model->where($condition)->decrement($filedName, $amount);
+    }
 }
