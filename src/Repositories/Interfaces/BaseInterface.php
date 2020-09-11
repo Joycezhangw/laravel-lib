@@ -137,4 +137,14 @@ interface BaseInterface
      * @return array
      */
     public function parseDataRows(array $rows): array;
+
+    /**
+     * 得到某个列的数组
+     * 使用场景：以 key 为数组索引，获取指定字段。或者直接获取一个字段得一维数组，比如：[1001,1002,1003] (只获取uid) 字段
+     * @param string $column 字段名 多个字段用逗号分隔
+     * @param array $condition 查询条件
+     * @param string $key  指定索引名
+     * @return array
+     */
+    public function column(string $column, $condition = [], string $key = ''): array;
 }

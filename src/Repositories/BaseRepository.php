@@ -200,4 +200,32 @@ abstract class BaseRepository implements BaseInterface
         }
         return $list;
     }
+
+    /**
+     * 得到某个列的数组
+     * @param string $column 字段名 多个字段用逗号分隔
+     * @param array $condition 查询条件
+     * @param string $key  索引
+     * @return array
+     */
+    public function column(string $column, $condition = [], string $key = ''): array
+    {
+        $field = array_map('trim', explode(',', $column));
+        $resultSet = $this->model->where($condition)->get($field)->toArray();
+        if (empty($resultSet)) {
+            $result = [];
+        } elseif (('*' == $column || strpos($column, ',')) && $key) {
+            $result = array_column($resultSet, null, $key);
+        } else {
+            if (empty($key)) {
+                $key = null;
+            }
+            if (strpos($column, ',')) {
+                $column = null;
+
+            }
+            $result = array_column($resultSet, $column, $key);
+        }
+        return $result;
+    }
 }
