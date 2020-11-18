@@ -2,7 +2,6 @@
   "name": "joycezhang/laravellib",
   "type": "library",
   "description": "一个php工具包，基于laravel:^5.0.*",
-  "version" : "1.0.0",
   "keywords": [
     "laravel",
     "miniprogram",
