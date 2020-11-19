@@ -2,9 +2,9 @@
 
 ## 依赖
 
-> PHP >=7.1
-> Composer
-> Laravel 5.5 +
+1. PHP >=7.1
+2. Composer
+3. Laravel 5.5 +
 
 ## 命名空间
 
@@ -12,7 +12,7 @@
 
 ## 安装
 
-`composer require joycezhang/laravellib`
+> `composer require joycezhang/laravellib`
 
 ## 用法
 
@@ -72,7 +72,7 @@ class ManageRepo extends BaseRepository implements IManage
 
 ###### 根据主键id获取单条数据
 
-```
+```php
 /**
  * 根据主键id获取单条数据
  * @param int $id 主键id
@@ -84,7 +84,7 @@ public function getByPkId(int $id);
 
 ###### 根据条件，获取一条指定字段数据
 
-```
+```php
 /**
  * 根据条件，获取一条指定字段数据
  * @param array $columns  要查询字段
@@ -96,7 +96,7 @@ public function first(array $condition, array $columns = ['*']);
 
 ###### 没有查找到单条数据，抛出异常
 
-```
+```php
 /**
 * 没有查找到数据，抛出异常
 * @param array $condition 查询条件
@@ -107,7 +107,7 @@ public function findOneOrFail(array $condition);
 
 ###### 获取全部数据
 
-```
+```php
 /**
  * 获取全部数据，不支持链表查询
  * @param array $condition 查询条件
@@ -120,7 +120,7 @@ public function all(array $condition = [], $columns = ['*'], string $orderBy = '
 
 ```
 ###### 创建一条数据，不联表状态
-```
+```php
 /**
  * 创建一条数据，不联表状态
  * @param array $attributes
@@ -129,7 +129,7 @@ public function all(array $condition = [], $columns = ['*'], string $orderBy = '
 public function doCreate(array $attributes);
 ```
 ###### 根据主键id，更新一条数据
-```
+```php
 /**
  * 根据主键id，更新一条数据,模型要设定指定主键id
  * @param array $attributes 要更新的字段
@@ -141,7 +141,7 @@ public function doUpdateById(array $attributes, int $id);
 
 ###### 根据主键删除id
 
-```
+```php
 /**
  * 根据主键删除id
  * @param int $id
@@ -152,7 +152,7 @@ public function deleteById(int $id): bool;
 
 ###### 分页查询，不支持链表查询
 
-```
+```php
 /**
  * 分页查询，不支持链表查询
  * @param int $limit 一页最多显示多少条，默认一页查询15条数据
@@ -168,7 +168,7 @@ public function paginate($limit = 15, array $columns = ['*'], array $condition =
 
 ###### 根据主键，更新某个字段，模型要指定主键名
 
-```
+```php
 /**
  * 根据主键，更新某个字段
  * @param int $id 主键id值
@@ -180,7 +180,7 @@ public function doUpdateFieldById(int $id, string $filedName, string $fieldValue
 ```
 ###### 统计数量
 
-```
+```php
 /**
  * 统计数量
  * @param array $condition
