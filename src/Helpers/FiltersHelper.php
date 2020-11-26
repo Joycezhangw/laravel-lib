@@ -25,7 +25,7 @@ class FiltersHelper
      * @param string $html_content
      * @return string|string[]|null
      */
-    static function richTextAbsoluteUrl($html_content = '')
+    public static function richTextAbsoluteUrl($html_content = '')
     {
 
         $pregRule = "/<[img|IMG].*?src=[\'|\"](.*?(?:[\.jpg|\.jpeg|\.png|\.gif|\.bmp]))[\'|\"].*?[\/]?>/";
@@ -39,7 +39,7 @@ class FiltersHelper
      * @param $string
      * @return string|string[]|null
      */
-    static function stringFilter($string)
+    public static function stringFilter($string)
     {
         $regArr = array(
             "/\s+/", //过滤多余空白
@@ -61,7 +61,7 @@ class FiltersHelper
      * @param string $string
      * @return string|string[]|null
      */
-    static function stringSpecialHtmlFilter(string $string)
+    public static function stringSpecialHtmlFilter(string $string)
     {
         $regArr = array(
             //过滤 <script>等可能引入恶意内容或恶意改变显示布局的代码,如果不需要插入flash等,还可以加入<object>的过滤
@@ -81,7 +81,7 @@ class FiltersHelper
      * @param int $num
      * @return int|string
      */
-    static function filterRank($num = 0)
+    public static function filterRank($num = 0)
     {
         if ($num >= 10000) {
             return round($num / 10000 * 100) / 100 . ' W';
@@ -98,9 +98,19 @@ class FiltersHelper
      * @param $mobile
      * @return string
      */
-    function filterMobile($mobile)
+    public static function filterMobile($mobile)
     {
         return substr($mobile, 0, 5) . "****" . substr($mobile, 9, 2);
+    }
+
+    /**
+     * 隐去身份证号中间几位数字
+     * @param string $identity_no
+     * @return string
+     */
+    public static function filterIdentityNo(string $identity_no): string
+    {
+        return strlen($identity_no) == 15 ? substr_replace($identity_no, "****", 8, 4) : (strlen($identity_no) == 18 ? substr_replace($identity_no, "****", 10, 4) : "");
     }
 
     /**
