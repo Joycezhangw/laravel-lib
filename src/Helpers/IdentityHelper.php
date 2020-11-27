@@ -23,7 +23,7 @@ class IdentityHelper
     }
 
     /**
-     * 根据身份证号获取生日
+     * 根据身份证号获取出生日期
      * @param string $idCard 身份证号
      * @return string|null
      */
