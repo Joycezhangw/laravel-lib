@@ -18,11 +18,30 @@
 
 ### Repositories 逻辑容器仓库设计模式
 
-需要在服务容器中绑定`Repositories`
+需要在服务容器`AppServiceProvider`类 `register()` 中绑定 `Repositories`
 
 ` $this->app->bind(IManage::class, ManageRepo::class);//管理员 `
 
 建议新建一个服务类 `RepositoryServiceProvider` 用于专门管理`Repositories`服务的绑定
+
+1. 编写服务提供者
+
+```yaml
+php artisan make:provider RepositoryServiceProvider
+```
+
+2. 注册服务提供者
+
+服务提供者都是通过配置文件 `config/app.php` 进行注册，只需要将服务添加到 `providers`数组中
+```php
+
+'providers' => [
+    // 其他服务提供者
+
+    App\Providers\RepositoryServiceProvider::class,
+]
+
+```
 
 #### Interfaces 接口继承
 
