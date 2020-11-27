@@ -54,7 +54,7 @@ class Validator
     const BANK_CARD_NUMBER_REGEX = '/^[1-9]\d{9,29}$/';
 
     //验证中文姓名
-    const CHINESE_NAME_REGEX = '/^(?:[\u4e00-\u9fa5]{2,16})$/';
+    const CHINESE_NAME_REGEX = '/^[\x7f-\xff]+$/';
 
     //验证英文姓名
     const ENGLISH_NAME_REGEX = '/(^[a-zA-Z]{1}[a-zA-Z\s]{0,20}[a-zA-Z]{1}$)/';
