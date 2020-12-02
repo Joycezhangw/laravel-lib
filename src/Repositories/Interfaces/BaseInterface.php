@@ -147,4 +147,11 @@ interface BaseInterface
      * @return array
      */
     public function column(string $column, $condition = [], string $key = ''): array;
+
+    /**
+     * 批量更新多条数据，默认更新主键为id，若不是，就以数组第一个主键为key进行更熟数据
+     * @param array $multipleData  二维数据
+     * @return bool
+     */
+    public function updateBatch(array $multipleData = []): bool;
 }

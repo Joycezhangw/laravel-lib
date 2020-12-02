@@ -14,6 +14,7 @@ declare (strict_types=1);
 namespace JoyceZ\LaravelLib\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use JoyceZ\LaravelLib\Repositories\Interfaces\BaseInterface;
 
 /**
@@ -227,5 +228,50 @@ abstract class BaseRepository implements BaseInterface
             $result = array_column($resultSet, $column, $key);
         }
         return $result;
+    }
+
+    /**
+     * 批量更新多条数据，默认更新主键为id，若不是，就以数组第一个主键为key进行更熟数据
+     * @param array $multipleData 二维数据
+     * @return bool
+     */
+    public function updateBatch(array $multipleData = []): bool
+    {
+        try {
+            if (empty($multipleData)) {
+                throw new \Exception('数据不能为空');
+            }
+            $tableName = $this->model->getTable();
+            //获取第一个数组
+            $firstRow = current($multipleData);
+            //获取数组keys
+            $updateColumn = array_keys($firstRow);
+            //默认以 id 为条件更新，如果没有则以第一个字段为更新条件
+            $pkField = isset($firstRow['id']) ? 'id' : current($updateColumn);
+            unset($updateColumn[0]);
+            //组装sql语句
+            $updateSql = 'UPDATE ' . $tableName . ' SET ';
+            $sets = [];
+            $bindings = [];
+            foreach ($updateColumn as $column) {
+                $setSql = '`' . $column . '` = CASE ';
+                foreach ($multipleData as $datum) {
+                    $setSql .= 'WHEN `' . $pkField . '` = ? THEN ? ';
+                    $bindings[] = $datum[$pkField];
+                    $bindings[] = $datum[$column];
+                }
+                $setSql .= 'ELSE `' . $column . '` END ';
+                $sets[] = $setSql;
+            }
+            $updateSql .= implode(', ', $sets);
+            $whereIn = collect($multipleData)->pluck($pkField)->values()->all();
+            $bindings = array_merge($bindings, $whereIn);
+            $whereIn = rtrim(str_repeat('?,', count($whereIn)), ',');
+            $updateSql = rtrim($updateSql, ', ') . ' WHERE `' . $pkField . '` IN (' . $whereIn . ')';
+            //出啊如预处理sql语句和对应绑定数据
+            return DB::update($updateSql, $bindings) > 0 ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
