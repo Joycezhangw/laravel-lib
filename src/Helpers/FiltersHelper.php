@@ -100,7 +100,7 @@ class FiltersHelper
      */
     public static function filterMobile($mobile)
     {
-        return substr($mobile, 0, 5) . "****" . substr($mobile, 9, 2);
+        return preg_replace("/(\d{3})\d{4}(\d{4})/", "\$1****\$2", $mobile);
     }
 
     /**
@@ -151,7 +151,7 @@ class FiltersHelper
         $strLen = mb_strlen($str, 'UTF-8');
         $firstStr = mb_substr($str, 0, $head, 'UTF-8');
         $lastStr = mb_substr($str, -$foot, $foot, 'UTF-8');
-        return $strLen == 2 ? $firstStr . str_repeat('*', 3) : $firstStr . str_repeat("*", 3) . $lastStr;
+        return $strLen == 2 ? $firstStr . str_repeat('*', 1) : $firstStr . str_repeat("*", $strLen - 2) . $lastStr;
     }
 
     /**
