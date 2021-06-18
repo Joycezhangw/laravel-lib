@@ -180,4 +180,71 @@ class FiltersHelper
             }
         }
     }
+
+    /**
+     * xss过滤函数
+     * @param string $string
+     * @return string|string[]|null
+     */
+    public static function filterXSS(string $string)
+    {
+        $string = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S', '', $string);
+        $param_one = ['javascript', 'vbscript', 'expression', 'script', 'applet', 'meta', 'xml', 'blink', 'link', 'script', 'embed', 'object', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base'];
+        $param_two = ['onabort', 'onactivate', 'onafterprint', 'onafterupdate', 'onbeforeactivate', 'onbeforecopy', 'onbeforecut', 'onbeforedeactivate', 'onbeforeeditfocus', 'onbeforepaste', 'onbeforeprint', 'onbeforeunload', 'onbeforeupdate', 'onblur', 'onbounce', 'oncellchange', 'onchange', 'onclick', 'oncontextmenu', 'oncontrolselect', 'oncopy', 'oncut', 'ondataavailable', 'ondatasetchanged', 'ondatasetcomplete', 'ondblclick', 'ondeactivate', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'onerror', 'onerrorupdate', 'onfilterchange', 'onfinish', 'onfocus', 'onfocusin', 'onfocusout', 'onhelp', 'onkeydown', 'onkeypress', 'onkeyup', 'onlayoutcomplete', 'onload', 'onlosecapture', 'onmousedown', 'onmouseenter', 'onmouseleave', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onmove', 'onmoveend', 'onmovestart', 'onpaste', 'onpropertychange', 'onreadystatechange', 'onreset', 'onresize', 'onresizeend', 'onresizestart', 'onrowenter', 'onrowexit', 'onrowsdelete', 'onrowsinserted', 'onscroll', 'onselect', 'onselectionchange', 'onselectstart', 'onstart', 'onstop', 'onsubmit', 'onunload'];
+        $param = array_merge($param_one, $param_two);
+        for ($i = 0; $i < sizeof($param); $i++) {
+            $pattern = '/';
+            for ($j = 0; $j < strlen($param[$i]); $j++) {
+                if ($j > 0) {
+                    $pattern .= '(';
+                    $pattern .= '(&#[x|X]0([9][a][b]);?)?';
+                    $pattern .= '|(&#0([9][10][13]);?)?';
+                    $pattern .= ')?';
+                }
+                $pattern .= $param[$i][$j];
+            }
+            $pattern .= '/i';
+            $string = preg_replace($pattern, ' ', $string);
+        }
+        return $string;
+    }
+
+    /**
+     * 数据脱敏
+     * @param $string  需要脱敏的值
+     * @param int $start  开始
+     * @param int $length  结束
+     * @param string $re 脱敏替代字符
+     * @return bool|string
+     *
+     * 例子:
+     * FiltersHelper::dataDesensitization('18811113683', 3, 4); //188****3683
+     * FiltersHelper::dataDesensitization('杨乐迪', 0, -1); //**迪
+     */
+    public static function dataDesensitization($string, $start = 0, $length = 0, $re = '*')
+    {
+        if (empty($string)) {
+            return false;
+        }
+        $strArr = [];
+        $mb_strLen = mb_strlen($string);
+        while ($mb_strLen) {//循环把字符串变为数组
+            $strArr[] = mb_substr($string, 0, 1, 'utf8');
+            $string = mb_substr($string, 1, $mb_strLen, 'utf8');
+            $mb_strLen = mb_strlen($string);
+        }
+        $strLen = count($strArr);
+        $begin = $start >= 0 ? $start : ($strLen - abs($start));
+        $end = $last = $strLen - 1;
+        if ($length > 0) {
+            $end = $begin + $length - 1;
+        } elseif ($length < 0) {
+            $end -= abs($length);
+        }
+        for ($i = $begin; $i <= $end; $i++) {
+            $strArr[$i] = $re;
+        }
+        if ($begin >= $end || $begin >= $last || $end > $last) return false;
+        return implode('', $strArr);
+    }
 }
