@@ -17,7 +17,17 @@ abstract class AbstractValidator
 {
     protected $validator;
 
-    protected $data;
+    /**
+     * 验证规则
+     * @var array
+     */
+    protected $rules = [];
+
+    /**
+     * 自定义验证错误消息
+     * @var array
+     */
+    protected $messages = [];
 
     public function __construct(Factory $validator)
     {
@@ -25,66 +35,26 @@ abstract class AbstractValidator
     }
 
     /**
-     * @param array $attributes
-     * @throws ValidationException
+     * 获取验证规则
+     * @return array
      */
-    public function valid(array $attributes)
+    public function getRules()
     {
-        $attributes = $this->existsValue($attributes, $this->haveToFields());
-
-        $this->data = $attributes;
-
-        $validator = $this->make($attributes);
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
+        return $this->rules;
     }
+
+    /**
+     * 获取验证自定义错误信息
+     * @return array
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+
 
     public function make(array $attributes)
     {
-        $rules = Arr::only($this->getRules(), array_keys($attributes));
-
-        return $this->validator->make($attributes, $rules, $this->getMessages());
-    }
-
-    /**
-     * 循环必传值(当required为空时不循环)
-     *
-     * @param $attributes
-     * @param $required
-     * @return mixed
-     */
-    public function existsValue($attributes, $required)
-    {
-        collect($required)->map(function ($item) use (&$attributes) {
-            if (!array_key_exists($item, $attributes)) {
-                $attributes[$item] = '';
-            }
-        });
-
-        return $attributes;
-    }
-
-    /**
-     * @return array
-     */
-    abstract protected function getRules();
-
-    /**
-     * @return array
-     */
-    protected function getMessages()
-    {
-        return [];
-    }
-
-    /**
-     * 必填字段值
-     *
-     * @return array
-     */
-    protected function haveToFields()
-    {
-        return [];
+        return $this->validator->make($attributes, $this->rules, $this->messages);
     }
 }
