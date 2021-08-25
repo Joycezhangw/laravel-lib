@@ -223,28 +223,16 @@ class FiltersHelper
      */
     public static function dataDesensitization($string, $start = 0, $length = 0, $re = '*')
     {
-        if (empty($string)) {
-            return false;
+        if(empty($string) || empty($length) || empty($re)) return $string;
+        $end = $start + $length;
+        $strlen = mb_strlen($string);
+        $str_arr = array();
+        for($i=0; $i<$strlen; $i++) {
+            if($i>=$start && $i<$end)
+                $str_arr[] = $re;
+            else
+                $str_arr[] = mb_substr($string, $i, 1);
         }
-        $strArr = [];
-        $mb_strLen = mb_strlen($string);
-        while ($mb_strLen) {//循环把字符串变为数组
-            $strArr[] = mb_substr($string, 0, 1, 'utf8');
-            $string = mb_substr($string, 1, $mb_strLen, 'utf8');
-            $mb_strLen = mb_strlen($string);
-        }
-        $strLen = count($strArr);
-        $begin = $start >= 0 ? $start : ($strLen - abs($start));
-        $end = $last = $strLen - 1;
-        if ($length > 0) {
-            $end = $begin + $length - 1;
-        } elseif ($length < 0) {
-            $end -= abs($length);
-        }
-        for ($i = $begin; $i <= $end; $i++) {
-            $strArr[$i] = $re;
-        }
-        if ($begin >= $end || $begin >= $last || $end > $last) return false;
-        return implode('', $strArr);
+        return implode('',$str_arr);
     }
 }

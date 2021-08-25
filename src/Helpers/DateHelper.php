@@ -28,8 +28,8 @@ class DateHelper
     public static function today()
     {
         return [
-            'start' => mktime(0, 0, 0, date('m'), date('d'), date('Y')),
-            'end' => mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1,
+            'start' => mktime(0, 0, 0, (int)date('m'), (int)date('d'), (int)date('Y')),
+            'end' => mktime(0, 0, 0, (int)date('m'), (int)date('d') + 1, (int)date('Y')) - 1,
         ];
     }
 
@@ -41,8 +41,8 @@ class DateHelper
     public static function yesterday()
     {
         return [
-            'start' => mktime(0, 0, 0, date('m'), date('d') - 1, date('Y')),
-            'end' => mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1,
+            'start' => mktime(0, 0, 0, (int)date('m'), (int)date('d') - 1, (int)date('Y')),
+            'end' => mktime(0, 0, 0, (int)date('m'), (int)date('d'), (int)date('Y')) - 1,
         ];
     }
 
@@ -59,8 +59,8 @@ class DateHelper
         }
 
         return [
-            'start' => mktime(0, 0, 0, date('m'), date('d') - date('w') + 1 - $length, date('Y')),
-            'end' => mktime(23, 59, 59, date('m'), date('d') - date('w') + 7 - $length, date('Y')),
+            'start' => mktime(0, 0, 0, (int)date('m'), (int)date('d') - (int)date('w') + 1 - $length, (int)date('Y')),
+            'end' => mktime(23, 59, 59, (int)date('m'), (int)date('d') - (int)date('w') + 7 - $length, (int)date('Y')),
         ];
     }
 
@@ -77,8 +77,8 @@ class DateHelper
             $length = 14;
         }
         return [
-            'start' => mktime(0, 0, 0, date('m'), date('d') - date('w') + 1 - $length, date('Y')),
-            'end' => mktime(23, 59, 59, date('m'), date('d') - date('w') + 7 - $length, date('Y')),
+            'start' => mktime(0, 0, 0, (int)date('m'), (int)date('d') - (int)date('w') + 1 - $length, (int)date('Y')),
+            'end' => mktime(23, 59, 59, (int)date('m'), (int)date('d') - (int)date('w') + 7 - $length, (int)date('Y')),
         ];
     }
 
@@ -90,8 +90,8 @@ class DateHelper
     public static function thisMonth()
     {
         return [
-            'start' => mktime(0, 0, 0, date('m'), 1, date('Y')),
-            'end' => mktime(23, 59, 59, date('m'), date('t'), date('Y')),
+            'start' => mktime(0, 0, 0, (int)date('m'), 1, (int)date('Y')),
+            'end' => mktime(23, 59, 59, (int)date('m'), (int)date('t'), (int)date('Y')),
         ];
     }
 
@@ -102,8 +102,8 @@ class DateHelper
      */
     public static function lastMonth()
     {
-        $start = mktime(0, 0, 0, date('m') - 1, 1, date('Y'));
-        $end = mktime(23, 59, 59, date('m') - 1, date('t'), date('Y'));
+        $start = mktime(0, 0, 0, (int)date('m') - 1, 1, (int)date('Y'));
+        $end = mktime(23, 59, 59, (int)date('m') - 1, (int)date('t'), (int)date('Y'));
 
         if (date('m', $start) != date('m', $end)) {
             $end -= 60 * 60 * 24;
@@ -124,8 +124,8 @@ class DateHelper
     public static function monthsAgo($month)
     {
         return [
-            'start' => mktime(0, 0, 0, date('m') - $month, 1, date('Y')),
-            'end' => mktime(23, 59, 59, date('m') - $month, date('t'), date('Y')),
+            'start' => mktime(0, 0, 0, (int)date('m') - $month, 1, (int)date('Y')),
+            'end' => mktime(23, 59, 59, (int)date('m') - $month, (int)date('t'), (int)date('Y')),
         ];
     }
 
@@ -158,8 +158,8 @@ class DateHelper
      */
     public static function aMonth($year = 0, $month = 0)
     {
-        $year = $year ?? date('Y');
-        $month = $month ?? date('m');
+        $year = $year ?? (int)date('Y');
+        $month = $month ?? (int)date('m');
         $day = date('t', strtotime($year . '-' . $month));
 
         return [
@@ -317,5 +317,53 @@ class DateHelper
             return date($format, $curTime);
         }
         return $result;
+    }
+
+    /**
+     * 每周重复、隔周重复
+     * 根据开始日期至结束日期以及指定周几获得对应重复日期
+     * @param string $startDate 开始日期 Y-m-d
+     * @param string $endDate 结束日期 Y-m-d
+     * @param array $week 选中数字周几 [1,2,3,4,5,6,7] 或中文周几 ['周天', '周一', '周二', '周三', '周四', '周五', '周六']
+     * @param bool $isApartWeek 是否隔周排期 true | false
+     * @param bool $isNumWeek 是否是数字周几 true | false
+     * @return array
+     */
+    public static function generateDateWeek(string $startDate, string $endDate, array $week = [], $isApartWeek = false, $isNumWeek = true)
+    {
+        $start_date = strtotime($startDate);
+        $end_date = strtotime($endDate);
+        $days = ($end_date - $start_date) / 86400;
+        $weekArr = $isNumWeek ? ['7', '1', '2', '3', '4', '5', '6'] : ['周天', '周一', '周二', '周三', '周四', '周五', '周六'];
+        // 组建数组格式 $dataWeek['日期'] => 星期
+        $dateWeek = [];
+        for ($i = 0; $i < $days; $i++) {
+            $num_week = date('w', $start_date + ($i * 86400));
+            $dateWeek[date('Y-m-d', $start_date + ($i * 86400))] = $weekArr[$num_week];
+        }
+        if ($isApartWeek) {
+            //以周日为节点，将每周日期规整在一起
+            $index = 0;
+            $separateDateWeek = [];
+            foreach ($dateWeek as $key => $item) {
+                $separateDateWeek[$index][] = [$key => $item];
+                if ((string)$item == (string)$weekArr[0]) {
+                    $index++;
+                }
+            }
+            //对以每周日期规整一起数组取偶，提出隔周日期数据
+            $evenDateWeek = [];
+            foreach ($separateDateWeek as $key => $item) {
+                if (!($key & 1)) {
+                    $evenDateWeek = array_merge($evenDateWeek, $item);
+                }
+            }
+            //二维数组合并成一维数组
+            $dateWeek = array_reduce($evenDateWeek, 'array_merge', []);
+        }
+        // 查找两个数组的交集，即获取提交的星期对应的日期
+        $newDate = array_intersect($dateWeek, $week);
+        // 获取数组中的键值(日期)，并组成一个新数组
+        return array_keys($newDate);
     }
 }
