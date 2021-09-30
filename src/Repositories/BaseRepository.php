@@ -155,6 +155,54 @@ abstract class BaseRepository implements BaseInterface
     }
 
     /**
+     * 求和
+     * @param array $condition
+     * @param string $columns
+     * @return mixed
+     */
+    public function sum(array $condition = [], string $columns = '')
+    {
+        $pkField = $columns == '' ? $this->model->getKeyName() : $columns;
+        return $this->model->where($condition)->sum($pkField);
+    }
+
+    /**
+     * 求平均值
+     * @param array $condition
+     * @param string $columns
+     * @return mixed
+     */
+    public function avg(array $condition = [], string $columns = '')
+    {
+        $pkField = $columns == '' ? $this->model->getKeyName() : $columns;
+        return $this->model->where($condition)->avg($pkField);
+    }
+
+    /**
+     * 求最大值
+     * @param array $condition
+     * @param string $columns
+     * @return mixed
+     */
+    public function max(array $condition = [], string $columns = '')
+    {
+        $pkField = $columns == '' ? $this->model->getKeyName() : $columns;
+        return $this->model->where($condition)->max($pkField);
+    }
+
+    /**
+     * 求最小值
+     * @param array $condition
+     * @param string $columns
+     * @return mixed
+     */
+    public function min(array $condition = [], string $columns = '')
+    {
+        $pkField = $columns == '' ? $this->model->getKeyName() : $columns;
+        return $this->model->where($condition)->min($pkField);
+    }
+
+    /**
      * 根据条件，指定某个字段值递增
      * @param array $condition 条件
      * @param string $filedName 指定字段名

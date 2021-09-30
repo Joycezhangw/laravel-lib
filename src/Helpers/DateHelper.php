@@ -158,13 +158,12 @@ class DateHelper
      */
     public static function aMonth($year = 0, $month = 0)
     {
-        $year = $year ?? (int)date('Y');
-        $month = $month ?? (int)date('m');
+        $year = $year == 0 ? (int)date('Y') : $year;
+        $month = $month == 0 ? (int)date('m') : $month;
         $day = date('t', strtotime($year . '-' . $month));
-
         return [
             "start" => strtotime($year . '-' . $month),
-            "end" => mktime(23, 59, 59, $month, $day, $year)
+            "end" => mktime(23, 59, 59, $month, (int)$day, (int)$year)
         ];
     }
 

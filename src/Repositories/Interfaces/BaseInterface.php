@@ -107,6 +107,38 @@ interface BaseInterface
     public function count(array $condition = [], string $columns = ''): int;
 
     /**
+     * 求和
+     * @param array $condition
+     * @param string $columns
+     * @return mixed
+     */
+    public function sum(array $condition = [], string $columns = '');
+
+    /**
+     * 求平均值
+     * @param array $condition
+     * @param string $columns
+     * @return mixed
+     */
+    public function avg(array $condition = [], string $columns = '');
+
+    /**
+     * 求最大值
+     * @param array $condition
+     * @param string $columns
+     * @return mixed
+     */
+    public function max(array $condition = [], string $columns = '');
+
+    /**
+     * 求最小值
+     * @param array $condition
+     * @param string $columns
+     * @return mixed
+     */
+    public function min(array $condition = [], string $columns = '');
+
+    /**
      * 指定某个字段值自增
      * @param array $condition
      * @param string $filedName
