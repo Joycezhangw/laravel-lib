@@ -123,9 +123,14 @@ class DateHelper
      */
     public static function monthsAgo($month)
     {
+        $start = mktime(0, 0, 0, (int)date('m') - $month, 1, (int)date('Y'));
+        $end = mktime(23, 59, 59, (int)date('m') - $month, (int)date('t'), (int)date('Y'));
+        if (date('m', $start) != date('m', $end)) {
+            $end -= 60 * 60 * 24;
+        }
         return [
-            'start' => mktime(0, 0, 0, (int)date('m') - $month, 1, (int)date('Y')),
-            'end' => mktime(23, 59, 59, (int)date('m') - $month, (int)date('t'), (int)date('Y')),
+            'start' => $start,
+            'end' => $end,
         ];
     }
 
