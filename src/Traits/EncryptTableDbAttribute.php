@@ -19,7 +19,7 @@ trait EncryptTableDbAttribute
      */
     public function setAttribute($key, $value)
     {
-        if (is_null($value) || !in_array($key, $this->encryptable)) {
+        if (is_null($value) || !in_array($key, $this->encryptTable)) {
             return parent::setAttribute($key, $value);
         }
         if ($this->isJsonCastable($key) && !is_null($value)) {
@@ -47,7 +47,7 @@ trait EncryptTableDbAttribute
         }
 
         // 在强制转换前解密
-        if (in_array($key, $this->encryptable) && !is_null($value) && $value !== '') {
+        if (in_array($key, $this->encryptTable) && !is_null($value) && $value !== '') {
             $value = $this->decrypt($value);
         }
 
@@ -115,7 +115,7 @@ trait EncryptTableDbAttribute
     private function decryptAttributes(array $attributes): array
     {
         foreach ($attributes as $key => $value) {
-            if (!in_array($key, $this->encryptable) || is_null($value) || $value === '') {
+            if (!in_array($key, $this->encryptTable) || is_null($value) || $value === '') {
                 continue;
             }
 
