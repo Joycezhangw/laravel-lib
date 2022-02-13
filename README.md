@@ -4,7 +4,7 @@
 
 1. PHP >=7.1
 2. Composer
-3. Laravel 5.5 +
+3. Laravel 6+
 
 ## 命名空间
 
@@ -227,6 +227,42 @@ public function parseDataRow(array $row): array;
  * @return array
  */
 public function parseDataRows(array $rows): array;
+
+```
+#### AopCrypt 字符串可逆加密
+使用的是支付宝支付包里面的加密
+```php
+
+use JoyceZ\LaravelLib\Aop\AopCrypt;
+
+$value='your string';
+// withScrectKey 设置加密密钥，默认为空字符串
+(new AopCrypt())->withScrectKey(env('APP_KEY'))->decrypt($value);
+
+```
+
+#### EncryptTableDbAttribute Eloquent 模型属性加密和解密
+
+- 不支持模糊搜索，只支持精准搜索
+- 使用 env('APP_KEY') 作为加解密key
+- 依赖 `JoyceZ\LaravelLib\Aop\AopCrypt` 加密工具 
+
+```php
+use JoyceZ\LaravelLib\Traits\EncryptTableDbAttribute;
+
+class Client extends Model {
+
+    use EncryptTableDbAttribute;
+   
+    /**
+     * 
+     * @var array  需要加密解密的字段
+     */
+    protected $encryptTable = [
+        'id_number', 
+        'email',
+    ];
+}
 ```
 
 
