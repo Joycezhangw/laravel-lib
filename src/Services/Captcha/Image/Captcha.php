@@ -4,7 +4,7 @@
 namespace JoyceZ\LaravelLib\Services\Captcha\Image;
 
 use Illuminate\Support\Facades\Cache;
-use JoyceZ\LaravelLib\Captcha as CaptchaContract;
+use JoyceZ\LaravelLib\Contracts\Captcha as CaptchaContract;
 
 /**
  * 图形验证码

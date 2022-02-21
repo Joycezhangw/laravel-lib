@@ -12,7 +12,7 @@ class ServiceProvider extends LaravelServiceProvider
 
     public function boot()
     {
-
+        $this->publishes([__DIR__ . '/config.php' => config_path('laraveladmin.php')]);
     }
 
     /**
@@ -32,7 +32,6 @@ class ServiceProvider extends LaravelServiceProvider
 
     public function register()
     {
-        $this->setupConfig();
         /**
          * 绑定图形验证码
          */
