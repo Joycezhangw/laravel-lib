@@ -25,7 +25,7 @@ class AopCrypt
      */
     public function withScrectKey(string $screctKey = '')
     {
-        $this->screctKey = $screctKey ?? config('laraveladmin.crypt.screct_key');
+        $this->screctKey = trim($screctKey) == '' ? config('laraveladmin.crypt.screct_key') : $screctKey;
         return $this;
     }
 
@@ -36,6 +36,7 @@ class AopCrypt
      */
     public function encrypt($str)
     {
+        dd($this->screctKey);
         //AES, 128 模式加密数据 CBC
         $screct_key = base64_decode($this->screctKey);
         $str = trim($str);
