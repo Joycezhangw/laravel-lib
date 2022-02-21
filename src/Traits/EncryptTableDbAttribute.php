@@ -132,7 +132,7 @@ trait EncryptTableDbAttribute
      */
     private function encrypt($value)
     {
-        return (new AopCrypt())->withScrectKey(env('APP_KEY'))->encrypt($value);
+        return (new AopCrypt())->withScrectKey()->encrypt($value);
     }
 
     /**
@@ -142,6 +142,6 @@ trait EncryptTableDbAttribute
      */
     public function decrypt($value)
     {
-        return (new AopCrypt())->withScrectKey(env('APP_KEY'))->decrypt($value);
+        return (new AopCrypt())->withScrectKey()->decrypt($value);
     }
 }

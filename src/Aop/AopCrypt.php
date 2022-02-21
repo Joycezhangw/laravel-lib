@@ -23,9 +23,9 @@ class AopCrypt
      * @param string $screctKey 加密盐
      * @return $this
      */
-    public function withScrectKey(string $screctKey)
+    public function withScrectKey(string $screctKey = '')
     {
-        $this->screctKey = $screctKey;
+        $this->screctKey = $screctKey ?? config('laraveladmin.crypt.screct_key');
         return $this;
     }
 
