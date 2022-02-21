@@ -1,14 +1,15 @@
 {
   "name": "joycezhang/laravellib",
   "type": "library",
-  "description": "一个php工具包，基于laravel:^5.0.*",
+  "description": "一个php工具包，基于laravel:^6.0.*",
   "keywords": [
     "laravel",
     "miniprogram",
     "poster"
   ],
   "require": {
-    "php": ">=7.0"
+    "php": ">=7.0",
+    "laravel/framework": "^6.0"
   },
   "require-dev": {
     "php": ">=7.0"
@@ -23,6 +24,13 @@
   "autoload": {
     "psr-4": {
       "JoyceZ\\LaravelLib\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "JoyceZ\\LaravelLib\\ServiceProvider"
+      ]
     }
   },
   "minimum-stability": "dev",
