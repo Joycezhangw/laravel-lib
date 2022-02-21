@@ -14,6 +14,10 @@
 
 > `composer require joycezhang/laravellib`
 
+## 生成配置文件
+
+> `php artisan vendor:publish --provider="JoyceZ\LaravelLib\ServiceProvider"`
+
 ## 用法
 
 ### Repositories 逻辑容器仓库设计模式
@@ -238,7 +242,10 @@ use JoyceZ\LaravelLib\Aop\AopCrypt;
 $value='your string';
 // withScrectKey 设置加密密钥，默认为空字符串
 (new AopCrypt())->withScrectKey(env('APP_KEY'))->decrypt($value);
-
+//使用配置文件中加密密钥
+(new AopCrypt())->withScrectKey()->decrypt($value);
+//自定义加密密钥
+(new AopCrypt())->withScrectKey(config('laraveladmin.crypt.screct_key'))->decrypt($value);
 ```
 
 #### EncryptTableDbAttribute Eloquent 模型属性加密和解密
@@ -262,6 +269,68 @@ class Client extends Model {
         'id_number', 
         'email',
     ];
+}
+```
+
+#### 图形验证码
+
+```php
+
+use JoyceZ\LaravelLib\Helpers\ResultHelper;
+use JoyceZ\LaravelLib\Contracts\Captcha as CaptchaInterface;
+
+class Passport extends Controller {
+
+        /**
+         * 获取图形验证码
+         * @param CaptchaInterface $captchaRepo
+         * @return array
+         */
+        public function captcha(CaptchaInterface $captchaRepo)
+        {
+            $captcha = $captchaRepo->makeCode()->get();
+            $captchaImg = Arr::get($captcha, 'image', '');
+            $captchaUniqid = Arr::get($captcha, 'uniq', '');
+            return ResultHelper::returnFormat('success', ResponseCode::SUCCESS, [
+                'captcha' => $captchaImg,
+                config('laraveladmin.passport.check_captcha_cache_key') => $captchaUniqid
+            ]);
+        }
+}
+```
+
+#### 密码验证
+
+
+
+```php
+
+use JoyceZ\LaravelLib\Helpers\ResultHelper;
+use JoyceZ\LaravelLib\Aop\AopPassword;
+use App\Http\ResponseCode;
+
+class Passport extends Controller {
+
+        /**
+         * 登录
+         * @param Request $request
+         * @return array
+         */
+        public function login(Request $request)
+        {
+           $params = $request->all();
+           $user=User::where('username',$params['username'])->find();
+           $pwdFlag = (new AopPassword())
+                    ->withSalt()
+                    ->check($user['password'], $params['password'], $user['pwd_salt']);
+                if (!$pwdFlag) {
+                    return ResultHelper::returnFormat('账号密码错误', ResponseCode::ERROR);
+                }
+                //密码加密
+                //$salt = Str::random(6);
+                //(new AopPassword())->withSalt(config('laraveladmin.passport.password_salt'))->encrypt('123456', $salt)
+
+        }
 }
 ```
 
