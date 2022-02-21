@@ -36,7 +36,6 @@ class AopCrypt
      */
     public function encrypt($str)
     {
-        dd($this->screctKey);
         //AES, 128 模式加密数据 CBC
         $screct_key = base64_decode($this->screctKey);
         $str = trim($str);
