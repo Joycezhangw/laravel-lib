@@ -1,25 +1,40 @@
 {
   "name": "joycezhang/laravellib",
   "type": "library",
-  "description": "一个php工具包，基于laravel:^6.0.*",
+  "description": "Laravel 6|7|8|9 Repository,enum,model ",
   "keywords": [
     "laravel",
-    "miniprogram",
-    "poster"
+    "repository",
+    "eloquent",
+    "model",
+    "cache",
+    "enum"
   ],
   "require": {
-    "php": ">=7.0"
-  },
-  "require-dev": {
-    "php": ">=7.0"
+    "php": "^7.2 || ^8.0",
+    "illuminate/http": "~6.0|~7.0|^8.0|^9.0",
+    "illuminate/config": "~6.0|~7.0|^8.0|^9.0",
+    "illuminate/support": "~6.0|~7.0|^8.0|^9.0",
+    "illuminate/database": "~6.0|~7.0|^8.0|^9.0",
+    "illuminate/pagination": "~6.0|~7.0|^8.0|^9.0",
+    "illuminate/console": "~6.0|~7.0|^8.0|^9.0",
+    "illuminate/filesystem": "~6.0|~7.0|^8.0|^9.0",
+    "illuminate/validation": "~6.0|~7.0|^8.0|^9.0"
   },
   "license": "MIT",
   "authors": [
     {
       "name": "joycezhangw",
+      "homepage": "https://qilindao.github.io/docs/",
       "email": "zhangwei762@163.com"
     }
   ],
+  "homepage": "https://qilindao.github.io/docs/backend/",
+  "support": {
+    "wiki":"https://qilindao.github.io/docs/backend/",
+    "source":"https://github.com/Joycezhangw/laravel-lib",
+    "docs": "https://qilindao.github.io/docs/backend/"
+  },
   "autoload": {
     "psr-4": {
       "JoyceZ\\LaravelLib\\": "src/"

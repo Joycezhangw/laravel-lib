@@ -2,6 +2,8 @@
 
 namespace JoyceZ\LaravelLib;
 
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Composer;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 use JoyceZ\LaravelLib\Contracts\Captcha as CaptchaContract;
 use JoyceZ\LaravelLib\Services\Captcha\Image\Captcha;
@@ -12,7 +14,7 @@ class ServiceProvider extends LaravelServiceProvider
 
     public function boot()
     {
-        $this->publishes([__DIR__ . '/config.php' => config_path('laraveladmin.php')]);
+        $this->publishes([__DIR__ . '/config.php' => config_path('landao.php')]);
     }
 
     /**
@@ -22,27 +24,39 @@ class ServiceProvider extends LaravelServiceProvider
     {
         $source = realpath(__DIR__ . '/config.php');
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
-            $this->publishes([$source => config_path('laraveladmin.php')], 'joyce-config');
+            $this->publishes([$source => config_path('landao.php')], 'joyce-config');
         } elseif ($this->app instanceof LumenApplication) {
-            $this->app->configure('laraveladmin');
+            $this->app->configure('landao');
         }
 
-        $this->mergeConfigFrom($source, 'laraveladmin');
+        $this->mergeConfigFrom($source, 'landao');
     }
 
     public function register()
+    {
+        $this->registerBindings();
+        $this->commands('JoyceZ\LaravelLib\Generators\Commands\MakeRepositoryCommand');
+        $this->commands('JoyceZ\LaravelLib\Generators\Commands\MakeEnumCommand');
+    }
+
+    protected function registerBindings()
     {
         /**
          * 绑定图形验证码
          */
         $this->app->bind(CaptchaContract::class, function () {
             $captcha = new Captcha();
-            $config = collect(config('laraveladmin.captcha'))->filter(function ($value) {
+            $config = collect(config('landao.captcha'))->filter(function ($value) {
                 return !empty($value);
             })->toArray();
             $captcha->withConfig($config);
             return $captcha;
         });
+    }
+
+    public function provides()
+    {
+        return [];
     }
 
 }
