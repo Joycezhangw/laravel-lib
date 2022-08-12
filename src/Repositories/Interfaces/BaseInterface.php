@@ -210,7 +210,7 @@ interface BaseInterface
      * @param string $fieldValue 字段值
      * @return mixed
      */
-    public function doUpdateFieldPkId(int $id, string $filedName, string $fieldValue);
+    public function updateFieldById(int $id, string $filedName, string $fieldValue);
 
     /**
      * 统计数量

@@ -215,7 +215,7 @@ abstract class BaseRepository implements BaseInterface
     public function firstOrCreate(array $attributes = [])
     {
         $model = $this->model->firstOrCreate($attributes);
-        $this->makeModel();
+        $this->resetModel();
         return $model;
     }
 
@@ -365,7 +365,7 @@ abstract class BaseRepository implements BaseInterface
      * @param string $fieldValue 字段值
      * @return mixed
      */
-    public function doUpdateFieldById(int $id, string $filedName, string $fieldValue)
+    public function updateFieldById(int $id, string $filedName, string $fieldValue)
     {
         $model = $this->model->find($id);
         $model->$filedName = $fieldValue;
@@ -631,7 +631,6 @@ abstract class BaseRepository implements BaseInterface
      */
     public function column(string $column, $condition = [], string $key = ''): array
     {
-        $this->applyCriteria();
         if ($condition) {
             $this->applyConditions($condition);
         }
