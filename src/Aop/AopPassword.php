@@ -23,7 +23,7 @@ class AopPassword
      */
     public function withSalt(string $salt='')
     {
-        $this->salt = trim($salt) == '' ? config('laraveladmin.passport.password_salt') : $salt;
+        $this->salt = trim($salt) == '' ? config('landao.passport.password_salt') : $salt;
         return $this;
     }
 

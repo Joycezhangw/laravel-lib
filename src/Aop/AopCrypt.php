@@ -25,7 +25,7 @@ class AopCrypt
      */
     public function withScrectKey(string $screctKey = '')
     {
-        $this->screctKey = trim($screctKey) == '' ? config('laraveladmin.crypt.screct_key') : $screctKey;
+        $this->screctKey = trim($screctKey) == '' ? config('landao.crypt.screct_key') : $screctKey;
         return $this;
     }
 

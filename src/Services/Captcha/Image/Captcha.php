@@ -86,7 +86,7 @@ class Captcha implements CaptchaContract
     {
         //生成验证码序号
         if (empty($this->uniqid)) {
-            $this->uniqid = md5(uniqid('laravel.vue.admin') . mt_rand(10000, 99999));
+            $this->uniqid = md5(uniqid('laravel.landao.admin') . mt_rand(10000, 99999));
         }
         if (empty($this->code)) {
             $length = strlen($this->config['captchaSalt']) - 1;
