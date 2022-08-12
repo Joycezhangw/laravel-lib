@@ -1,0 +1,19 @@
+<?php
+declare(strict_types=1);
+
+namespace $NAMESPACE$
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * 请说明具体哪块业务的 Eloquent ORM
+ *
+ * @author joyecZhang <https://qilindao.github.io/docs/backend/>
+ *
+ * Class $CLASS$Model
+ * @package $NAMESPACE$
+ */
+class $CLASS$Model extends Model
+{
+
+}

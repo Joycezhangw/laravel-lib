@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+namespace $NAMESPACE$
+
+use JoyceZ\LaravelLib\Repositories\BaseRepository;
+use $INTERFACES$;
+use $MODEL$;
+
+/**
+ * 请说明具体哪块业务的 Repository 接口实现
+ *
+ * @author joyecZhang <https://qilindao.github.io/docs/backend/>
+ *
+ * Class $CLASS$Repo
+ * @package $NAMESPACE$
+ */
+class $CLASS$Repo extends BaseRepository implements I$CLASS$
+{
+
+    /**
+     * @return string
+     */
+    public function model()
+    {
+        return $CLASS$Model::class;
+    }
+}

@@ -1,0 +1,24 @@
+<?php
+
+namespace $NAMESPACE$
+
+use JoyceZ\LaravelLib\Enum\BaseEnum;
+
+/**
+ * 请说明具体哪块业务的 Enum
+ *
+ * @author joyecZhang <https://qilindao.github.io/docs/backend/laravel-lib/enum.html>
+ *
+ * Class $CLASS$Enum
+ * @package $NAMESPACE$
+ */
+class $CLASS$Enum extends BaseEnum
+{
+
+    public static function getMap(): array
+    {
+        return [
+            //
+        ];
+    }
+}
