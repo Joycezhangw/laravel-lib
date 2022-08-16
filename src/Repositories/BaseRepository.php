@@ -15,12 +15,9 @@ namespace JoyceZ\LaravelLib\Repositories;
 
 use Illuminate\Container\Container as Application;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use JoyceZ\LaravelLib\Contracts\RepoCriteria;
 use JoyceZ\LaravelLib\Exceptions\RepositoryException;
 use JoyceZ\LaravelLib\Repositories\Interfaces\BaseInterface;
-use JoyceZ\LaravelLib\Repositories\Interfaces\CriteriaInterface;
 use Closure;
 
 /**
@@ -339,7 +336,7 @@ abstract class BaseRepository implements BaseInterface
     public function updateById(array $attributes, int $id)
     {
         $model = $this->model->find($id);
-        $result = $model->update($properties);
+        $result = $model->update($attributes);
         $this->resetModel();
         return $result;
     }
@@ -726,6 +723,10 @@ abstract class BaseRepository implements BaseInterface
                         if (!$operator) $operator = '=';
                         $this->model = $this->model->whereYear($field, $operator, $val);
                         break;
+                    case 'TIME':
+                        if (!$operator) $operator = '=';
+                        $this->model = $this->model->whereTime($field, $operator, $val);
+                        break;
                     case 'EXISTS':
                         if (!($val instanceof Closure)) throw new RepositoryException("Input {$val} must be closure function");
                         $this->model = $this->model->whereExists($val);
@@ -782,11 +783,11 @@ abstract class BaseRepository implements BaseInterface
      */
     public function transaction(callable $callable = null)
     {
-        if (is_null($callback)) {
+        if (is_null($callable)) {
             DB::beginTransaction();
             return;
         }
-        DB::transaction(call_user_func($callback));
+        DB::transaction(call_user_func($callable));
     }
 
     /**
