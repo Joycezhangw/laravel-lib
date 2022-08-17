@@ -84,7 +84,7 @@ php artisan make:repository "Blog\Post"
 
 - `App\Services\Models\Bolg\PostModel.php`
 - `App\Services\Repositories\Bolg\Interfaces\IPost.php`
-- `App\Services\Repositories\Bolg\PostReop.php`
+- `App\Services\Repositories\Bolg\PostRepo.php`
 
 
 

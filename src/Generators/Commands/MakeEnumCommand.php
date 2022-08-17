@@ -7,9 +7,14 @@ namespace JoyceZ\LaravelLib\Generators\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use JoyceZ\LaravelLib\Generators\EnumGenerator;
-use JoyceZ\LaravelLib\Generators\FileAlreadyExistsException;
+use JoyceZ\LaravelLib\Exceptions\FileAlreadyExistsException;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * Artisan 命令生成 enum 文件
+ * Class MakeEnumCommand
+ * @package JoyceZ\LaravelLib\Generators\Commands
+ */
 class MakeEnumCommand extends Command
 {
     /**

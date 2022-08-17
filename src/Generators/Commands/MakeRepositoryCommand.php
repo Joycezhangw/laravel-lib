@@ -6,13 +6,17 @@ namespace JoyceZ\LaravelLib\Generators\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use JoyceZ\LaravelLib\Generators\FileAlreadyExistsException;
+use JoyceZ\LaravelLib\Exceptions\FileAlreadyExistsException;
 use JoyceZ\LaravelLib\Generators\ModelGenerator;
 use JoyceZ\LaravelLib\Generators\RepositoryGenerator;
 use JoyceZ\LaravelLib\Generators\RepositoryInterfaceGenerator;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
+/**
+ * Artisan 命令生成 Repository 相关文件
+ * Class MakeRepositoryCommand
+ * @package JoyceZ\LaravelLib\Generators\Commands
+ */
 class MakeRepositoryCommand extends Command
 {
 
