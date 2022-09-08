@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JoyceZ\LaravelLib\Aop;
+namespace JoyceZ\LaravelLib\Security;
 
 
 use Illuminate\Support\Str;
@@ -9,8 +9,7 @@ use Illuminate\Support\Str;
 /**
  * 密码操作
  * Class AopPassword
- * @author joyecZhang <zhangwei762@163.com>
- * @package JoyceZ\LaravelLib\Aop
+ * @package JoyceZ\LaravelLib\Security
  */
 class AopPassword
 {
@@ -21,7 +20,7 @@ class AopPassword
      * @param string $salt 加密盐
      * @return $this
      */
-    public function withSalt(string $salt='')
+    public function withSalt(string $salt = '')
     {
         $this->salt = trim($salt) == '' ? config('landao.passport.password_salt') : $salt;
         return $this;

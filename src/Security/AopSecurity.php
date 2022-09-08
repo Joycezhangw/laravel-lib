@@ -1,15 +1,17 @@
 <?php
 
 
-namespace JoyceZ\LaravelLib\Aop;
+namespace JoyceZ\LaravelLib\Security;
 
+
+use JoyceZ\LaravelLib\Exceptions\DecryptErrorException;
 /**
  * 加密工具
  * Class AopCrypt
  * @author alipay  https://github.com/alipay/alipay-sdk-php-all
  * @package JoyceZ\LaravelLib\Aop
  */
-class AopCrypt
+class AopSecurity
 {
     /**
      * 密钥
@@ -17,16 +19,26 @@ class AopCrypt
      */
     protected $screctKey = '';
 
+    protected $scretIv = '';
+
 
     /**
      * 设置密码加密盐
      * @param string $screctKey 加密盐
      * @return $this
      */
-    public function withScrectKey(string $screctKey = '')
+    public function withScrectKey(string $screctKey = '', $iv='')
     {
-        $this->screctKey = trim($screctKey) == '' ? config('landao.crypt.screct_key') : $screctKey;
+        $this->screctKey = trim($screctKey) == '' ? config('landao.security.security_key') : $screctKey;
+        $this->scretIv = trim($iv) == '' ? config('landao.security.security_iv') : $iv;
         return $this;
+    }
+
+    public function hmac_md5($input)
+    {
+        $key = base64_decode($this->screctKey);
+
+        return hash_hmac('md5', $input, $key, true);
     }
 
     /**
@@ -43,15 +55,17 @@ class AopCrypt
 
         //设置全0的IV
 
-        $iv = str_repeat("\0", 16);
+        $iv = $this->scretIv;//str_repeat("\0", 16);
         $encrypt_str = openssl_encrypt($str, 'aes-128-cbc', $screct_key, OPENSSL_NO_PADDING, $iv);
         return base64_encode($encrypt_str);
     }
 
+
     /**
      * 解密方法
-     * @param string $str
-     * @return string
+     * @param $str
+     * @return false|string
+     * @throws DecryptErrorException
      */
     public function decrypt($str)
     {
@@ -60,10 +74,13 @@ class AopCrypt
         $screct_key = base64_decode($this->screctKey);
 
         //设置全0的IV
-        $iv = str_repeat("\0", 16);
-        $decrypt_str = openssl_decrypt($str, 'aes-128-cbc', $screct_key, OPENSSL_NO_PADDING, $iv);
-        $decrypt_str = $this->stripPKSC7Padding($decrypt_str);
-        return $decrypt_str;
+        $iv = $this->scretIv;//str_repeat("\0", 16);
+        $decrypted = openssl_decrypt($str, 'aes-128-cbc', $screct_key, OPENSSL_NO_PADDING, $iv);
+        $decrypted = $this->stripPKSC7Padding($decrypted);
+        if (!$decrypted) {
+            throw new DecryptErrorException(sprintf('解密失败，请检查密钥 %s 密文 %s 是否正确?', $screct_key, $str));
+        }
+        return $decrypted;
     }
 
     /**

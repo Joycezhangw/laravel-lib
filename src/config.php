@@ -5,8 +5,9 @@ return [
         'check_captcha_cache_key' => 'captcha_uniqid',
         'password_salt' => env('LANDAO_PASSPORT_PASSWORD_SALT', env('APP_KEY'))
     ],
-    'crypt' => [
-        'screct_key' => env('LANDAO_CRYPT_SCRECT_KEY', env('APP_KEY'))
+    'security' => [
+        'security_key' => env('LANDAO_CRYPT_SECURITY_KEY', md5('landao_admin')),
+        'security_iv' => env('LANDAO_CRYPT_SECURITY_IV', str_repeat("\0", 16))
     ],
     'captcha' => [
         'charset' => 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789',

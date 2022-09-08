@@ -2,7 +2,7 @@
 
 namespace JoyceZ\LaravelLib\Traits;
 
-use JoyceZ\LaravelLib\Aop\AopCrypt;
+use JoyceZ\LaravelLib\Security\AopSecurity;
 
 /**
  * 对数据进行加密
@@ -30,10 +30,9 @@ trait EncryptTableDbAttribute
     }
 
     /**
-     * Get a plain attribute (not a relationship).
-     *
-     * @param string $key
-     * @return mixed
+     * @param $key
+     * @return false|string
+     * @throws \JoyceZ\LaravelLib\Exceptions\DecryptErrorException
      */
     public function getAttributeValue($key)
     {
@@ -72,8 +71,8 @@ trait EncryptTableDbAttribute
 
     /**
      * 将模型的属性转换为数组
-     *
      * @return array
+     * @throws \JoyceZ\LaravelLib\Exceptions\DecryptErrorException
      */
     public function attributesToArray(): array
     {
@@ -109,8 +108,10 @@ trait EncryptTableDbAttribute
     }
 
     /**
+     * 解密字段
      * @param array $attributes
      * @return array
+     * @throws \JoyceZ\LaravelLib\Exceptions\DecryptErrorException
      */
     private function decryptAttributes(array $attributes): array
     {
@@ -132,16 +133,17 @@ trait EncryptTableDbAttribute
      */
     private function encrypt($value)
     {
-        return (new AopCrypt())->withScrectKey()->encrypt($value);
+        return (new AopSecurity())->withScrectKey()->encrypt($value);
     }
 
     /**
      * 解密
-     * @param mixed $value
-     * @return mixed
+     * @param $value
+     * @return false|string
+     * @throws \JoyceZ\LaravelLib\Exceptions\DecryptErrorException
      */
     public function decrypt($value)
     {
-        return (new AopCrypt())->withScrectKey()->decrypt($value);
+        return (new AopSecurity())->withScrectKey()->decrypt($value);
     }
 }
