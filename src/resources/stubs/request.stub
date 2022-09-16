@@ -1,0 +1,61 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use JoyceZ\LaravelLib\Validation\BaseRequest;
+
+/**
+ * 请说明具体哪块业务的 Request
+ *
+ * Class $CLASS$Request
+ * @package $NAMESPACE$
+ */
+class $CLASS$Request extends BaseRequest
+{
+
+    /**
+     *  定义针对 Controller->store( )的验证规则
+     * @return array
+     */
+    public function getRulesByStore()
+    {
+        return [
+
+        ];
+    }
+
+    /**
+     *  定义针对 Controller->update( )的验证规则
+     * @return array
+     */
+    public function getRulesByUpdate()
+    {
+        return [
+
+        ];
+    }
+
+    /**
+     * 定义针对 Controller->delete( )的验证规则
+     *
+     * @return array
+     */
+    public function getRulesByDelete()
+    {
+        return [
+        ];
+    }
+
+    /**
+     * 统一定义验证规则的自定义错误消息。
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+
+        ];
+    }
+
+
+}
