@@ -357,4 +357,19 @@ class StrHelper
 
         return $string;
     }
+
+    /**
+     * 判断字符串是否是json格式
+     * @param string $str 字符串
+     * @param bool $assoc 是否返回关联数组，默认返回对象
+     * @return bool|string
+     */
+    public static function isJson(string $str = '', $assoc = false)
+    {
+        $data = json_decode($str, $assoc);
+        if (($data && is_object($data)) || is_array($data)) {
+            return true;
+        }
+        return false;
+    }
 }
