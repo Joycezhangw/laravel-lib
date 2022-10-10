@@ -25,7 +25,8 @@ trait EncryptTableDbAttribute
         if ($this->isJsonCastable($key) && !is_null($value)) {
             $value = $this->castAttributeAsJson($key, $value);
         }
-        $value = $this->encrypt($value);
+        //为空不进行加密
+        $value = !is_null($value) && $value !== '' ? $this->encrypt($value) : $value;
         return parent::setAttribute($key, $value);
     }
 
