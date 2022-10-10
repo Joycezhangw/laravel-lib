@@ -7,9 +7,11 @@ namespace JoyceZ\LaravelLib\Validation;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Response;
+use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 
 /**
- * 表单提交验证
+ * Request 请求校验
  * Class BaseRequest
  * @package JoyceZ\LaravelLib\Validation
  */
@@ -41,12 +43,13 @@ abstract class BaseRequest extends FormRequest
     /**
      * 验证消息通过，json抛出，api开发
      * @param Validator $validator
-     * @throws \HttpResponseException
+     * @throws HttpResponseException
      */
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json([
-            'code' => -1,
+        throw new HttpResponseException(Response::json([
+            'status' => "error",
+            'code' => FoundationResponse::HTTP_BAD_REQUEST,
             'message' => $validator->errors()->first()
         ]));
     }
