@@ -370,4 +370,34 @@ class DateHelper
         // 获取数组中的键值(日期)，并组成一个新数组
         return array_keys($newDate);
     }
+
+    /**
+     * 对比两组时间交叉
+     * @param int $beginTime1
+     * @param int $endTime1
+     * @param int $beginTime2
+     * @param int $endTime2
+     * @return bool
+     */
+    public static function isDateTimeCross($beginTime1 = 0, $endTime1 = 0, $beginTime2 = 0, $endTime2 = 0)
+    {
+        $status = $beginTime2 - $beginTime1;
+
+        if ($status > 0) {
+            $status2 = $beginTime2 - $endTime1;
+            if ($status2 >= 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            $status2 = $endTime2 - $beginTime1;
+            if ($status2 > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
 }
