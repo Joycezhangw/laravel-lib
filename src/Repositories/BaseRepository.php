@@ -422,7 +422,7 @@ abstract class BaseRepository implements BaseInterface
             $bindings = array_merge($bindings, $whereIn);
             $whereIn = rtrim(str_repeat('?,', count($whereIn)), ',');
             $updateSql = rtrim($updateSql, ', ') . ' WHERE `' . $pkField . '` IN (' . $whereIn . ')';
-            //出啊如预处理sql语句和对应绑定数据
+            //预处理sql语句和对应绑定数据
             return DB::update($updateSql, $bindings) > 0 ? true : false;
         } catch (\Exception $e) {
             return false;
@@ -433,7 +433,9 @@ abstract class BaseRepository implements BaseInterface
     /**
      * 根据主键删除id，物理删除。返回的是影响行数
      * @param int $id 主键值
-     * @return int
+     * @return int|mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function deleteById(int $id)
     {
