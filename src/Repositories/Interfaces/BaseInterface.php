@@ -84,6 +84,20 @@ interface BaseInterface
     public function findWhereNotIn(string $field, array $values, $columns = ['*']);
 
     /**
+     * 判断数据是否存在，存在返回true 不存在返回false
+     * @param array $where 查询条件
+     * @return bool
+     */
+    public function existsWhere(array $where): bool;
+
+    /**
+     * 判断数据是否存在，存在返回 false 不存在返回 true
+     * @param array $where
+     * @return bool
+     */
+    public function doesntExistWhere(array $where): bool;
+
+    /**
      * 根据主键id获取单条数据
      * @param int $id 主键id
      * @return mixed

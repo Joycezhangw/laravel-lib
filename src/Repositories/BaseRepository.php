@@ -193,11 +193,11 @@ abstract class BaseRepository implements BaseInterface
     /**
      * 判断数据是否存在，存在返回true 不存在返回false
      * @param array $where 查询条件
-     * @return boolean true | false
+     * @return bool
      * @throws RepositoryException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function existsWhere(array $where)
+    public function existsWhere(array $where): bool
     {
         $this->applyConditions($where);
         $model = $this->model->exists();
@@ -208,11 +208,11 @@ abstract class BaseRepository implements BaseInterface
     /**
      * 判断数据是否存在，存在返回 false 不存在返回 true
      * @param array $where
-     * @return mixed
+     * @return bool
      * @throws RepositoryException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function doesntExistWhere(array $where)
+    public function doesntExistWhere(array $where): bool
     {
         $this->applyConditions($where);
         $model = $this->model->doesntExist();
