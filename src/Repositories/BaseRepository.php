@@ -97,9 +97,11 @@ abstract class BaseRepository implements BaseInterface
 
     /**
      * 根据主键查询
-     * @param $id
-     * @param array $columns
+     * @param int | string $id 组键 id
+     * @param array $columns 查询字段
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function find($id, $columns = ['*'])
     {
@@ -110,10 +112,12 @@ abstract class BaseRepository implements BaseInterface
 
     /**
      * 按字段值查询单条数据
-     * @param $field
-     * @param null $value
-     * @param array $columns
+     * @param string $field 要查询字段名
+     * @param null $value 字段值
+     * @param array $columns 查询字段
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function findByField($field, $value = null, $columns = ['*'])
     {
@@ -124,10 +128,12 @@ abstract class BaseRepository implements BaseInterface
 
     /**
      * 按字段值查询列表
-     * @param $field
-     * @param null $value
-     * @param array $columns
+     * @param string $field 字段名
+     * @param null $value 字段值
+     * @param array $columns 查询字段
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function findAllByField($field, $value = null, $columns = ['*'])
     {
@@ -136,13 +142,13 @@ abstract class BaseRepository implements BaseInterface
         return $model;
     }
 
-
     /**
      * 根据条件查询数据
-     * @param array $where
-     * @param array $columns
+     * @param array $where 查询条件
+     * @param array $columns 查询字段
      * @return mixed
      * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function findWhere(array $where, $columns = ['*'])
     {
@@ -154,10 +160,12 @@ abstract class BaseRepository implements BaseInterface
 
     /**
      * 根据字段多个值获取数据列表
-     * @param string $field
-     * @param array $values
-     * @param array $columns
-     * @return mixed|void
+     * @param string $field 字段名
+     * @param array $values 字段值
+     * @param array $columns 查询字段
+     * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function findWhereIn(string $field, array $values, $columns = ['*'])
     {
@@ -168,14 +176,46 @@ abstract class BaseRepository implements BaseInterface
 
     /**
      * 查询不在指定字段值中的数据
-     * @param string $field
-     * @param array $values
-     * @param array $columns
-     * @return mixed|void
+     * @param string $field 字段名
+     * @param array $values 字段值
+     * @param array $columns 查询字段
+     * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function findWhereNotIn(string $field, array $values, $columns = ['*'])
     {
         $model = $this->model->whereNotIn($field, $values)->get($columns);
+        $this->resetModel();
+        return $model;
+    }
+
+    /**
+     * 判断数据是否存在，存在返回true 不存在返回false
+     * @param array $where 查询条件
+     * @return boolean true | false
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function existsWhere(array $where)
+    {
+        $this->applyConditions($where);
+        $model = $this->model->exists();
+        $this->resetModel();
+        return $model;
+    }
+
+    /**
+     * 判断数据是否存在，存在返回 false 不存在返回 true
+     * @param array $where
+     * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function doesntExistWhere(array $where)
+    {
+        $this->applyConditions($where);
+        $model = $this->model->doesntExist();
         $this->resetModel();
         return $model;
     }
@@ -193,9 +233,10 @@ abstract class BaseRepository implements BaseInterface
 
     /**
      * 根据条件，获取一条指定字段数据
-     * @param array $condition 查询条件
      * @param array $columns 查询指定字段
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function first(array $columns = ['*'])
     {
@@ -208,6 +249,8 @@ abstract class BaseRepository implements BaseInterface
      * 查找第一条数据，获取创建
      * @param array $attributes
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function firstOrCreate(array $attributes = [])
     {
@@ -230,6 +273,8 @@ abstract class BaseRepository implements BaseInterface
      * 查询数据列表
      * @param array $columns
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function all(array $columns = ['*'])
     {
@@ -288,8 +333,10 @@ abstract class BaseRepository implements BaseInterface
     /**
      * 获取分页
      * @param array $columns
-     * @param null $limit
+     * @param int $limit
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function paginate($columns = ['*'], $limit = 0)
     {
@@ -299,11 +346,12 @@ abstract class BaseRepository implements BaseInterface
         return $results;
     }
 
-
     /**
      * 保存新模型，此方法会返回模型实例,需要在模型上指定 fillable 或 guarded 属性
      * @param array $attributes 需要保存的字段和值
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function create(array $attributes)
     {
@@ -332,6 +380,8 @@ abstract class BaseRepository implements BaseInterface
      * @param array $attributes 要更新的字段
      * @param int $id 更新主键值
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function updateById(array $attributes, int $id)
     {
@@ -345,7 +395,9 @@ abstract class BaseRepository implements BaseInterface
      * 根据指定条件更新数据，批量更新
      * @param array $condition 更新条件
      * @param array $attributes 要更新的字段
-     * @return mixed
+     * @return bool|mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function updateByWhere(array $condition, array $attributes)
     {
@@ -361,6 +413,8 @@ abstract class BaseRepository implements BaseInterface
      * @param string $filedName 字段名称
      * @param string $fieldValue 字段值
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function updateFieldById(int $id, string $filedName, string $fieldValue)
     {
@@ -376,6 +430,8 @@ abstract class BaseRepository implements BaseInterface
      * @param array $attributes
      * @param array $values
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function updateOrCreate(array $attributes, array $values = [])
     {
@@ -480,9 +536,11 @@ abstract class BaseRepository implements BaseInterface
      *     1.不建议使用 $columns='*'，请指定特定字段名，如果没指定，默认为主键字段名
      *     2.不建议用 count() 来判断数据存不存在，请使用find 或者 first 来判断数据是否存在
      *
-     * @param array $condition 查询条件
-     * @param string $columns 统计字段
+     * @param array $condition
+     * @param string $columns
      * @return int
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function count(array $condition = [], string $columns = ''): int
     {
@@ -500,6 +558,8 @@ abstract class BaseRepository implements BaseInterface
      * @param array $condition
      * @param string $columns
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function sum(array $condition = [], string $columns = '')
     {
@@ -517,6 +577,8 @@ abstract class BaseRepository implements BaseInterface
      * @param array $condition
      * @param string $columns
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function avg(array $condition = [], string $columns = '')
     {
@@ -534,6 +596,8 @@ abstract class BaseRepository implements BaseInterface
      * @param array $condition
      * @param string $columns
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function max(array $condition = [], string $columns = '')
     {
@@ -551,6 +615,8 @@ abstract class BaseRepository implements BaseInterface
      * @param array $condition
      * @param string $columns
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function min(array $condition = [], string $columns = '')
     {
@@ -568,7 +634,9 @@ abstract class BaseRepository implements BaseInterface
      * @param array $condition 条件
      * @param string $filedName 指定字段名
      * @param int $amount 自增数量
-     * @return mixed
+     * @return int|mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function increment(array $condition, string $filedName, int $amount = 1)
     {
@@ -585,7 +653,9 @@ abstract class BaseRepository implements BaseInterface
      * @param array $condition 条件
      * @param string $filedName 指定字段名
      * @param int $amount 递减数量
-     * @return mixed
+     * @return int|mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function decrement(array $condition, string $filedName, int $amount = 1)
     {
@@ -627,6 +697,8 @@ abstract class BaseRepository implements BaseInterface
      * @param array $condition 查询条件
      * @param string $key 索引
      * @return array
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function column(string $column, $condition = [], string $key = ''): array
     {
@@ -669,7 +741,6 @@ abstract class BaseRepository implements BaseInterface
         // TODO: Implement withCount() method.
     }
 
-
     /**
      * 同步关联
      * @param $id
@@ -677,16 +748,18 @@ abstract class BaseRepository implements BaseInterface
      * @param $attributes
      * @param bool $detaching
      * @return mixed
+     * @throws RepositoryException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function sync($id, $relation, $attributes, $detaching = true)
     {
         return $this->find($id)->{$relation}()->sync($attributes, $detaching);
     }
 
-
     /**
      * 将 where 查询条件，追加到模型
      * @param array $where
+     * @throws RepositoryException
      */
     protected function applyConditions(array $where)
     {
