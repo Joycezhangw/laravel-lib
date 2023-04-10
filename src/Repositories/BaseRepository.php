@@ -451,7 +451,7 @@ abstract class BaseRepository implements BaseInterface
     {
         try {
             if (empty($multipleData)) {
-                throw new \Exception('数据不能为空');
+                throw new RepositoryException('数据不能为空');
             }
             $tableName = $this->model->getTable();
             //获取第一个数组
@@ -885,13 +885,13 @@ abstract class BaseRepository implements BaseInterface
         DB::commit();
     }
 
-
+    
     /**
      * 打印sql语句
      * @param Closure $callback
      * @param string $tableName
      * @return mixed|void
-     * @throws \Exception
+     * @throws RepositoryException
      */
     public function getQuerySql(Closure $callback, string $tableName = '')
     {
@@ -899,8 +899,8 @@ abstract class BaseRepository implements BaseInterface
             DB::connection($tableName)->enableQueryLog();
             $callback($this);
             dump(DB::getQueryLog());
-        } catch (\Exception $exception) {
-            throw $exception;
+        } catch (QueryException $exception) {
+            throw new RepositoryException($exception->getMessage());
         }
     }
 
