@@ -102,8 +102,9 @@ class DateHelper
      */
     public static function lastMonth()
     {
-        $start = mktime(0, 0, 0, (int)date('m') - 1, 1, (int)date('Y'));
-        $end = mktime(23, 59, 59, (int)date('m') - 1, (int)date('t'), (int)date('Y'));
+        $year = (int)date('Y');
+        $start = mktime(0, 0, 0, (int)date('m') - 1, 1,$year);
+        $end = mktime(23, 59, 59, (int)date('m') - 1, (int)date('t',$start), $year);
 
         if (date('m', $start) != date('m', $end)) {
             $end -= 60 * 60 * 24;
@@ -123,8 +124,9 @@ class DateHelper
      */
     public static function monthsAgo($month)
     {
-        $start = mktime(0, 0, 0, (int)date('m') - $month, 1, (int)date('Y'));
-        $end = mktime(23, 59, 59, (int)date('m') - $month, (int)date('t'), (int)date('Y'));
+        $year = (int)date('Y');
+        $start = mktime(0, 0, 0, (int)date('m') - $month, 1, $year);
+        $end = mktime(23, 59, 59, (int)date('m') - $month, (int)date('t',$start), $year);
         if (date('m', $start) != date('m', $end)) {
             $end -= 60 * 60 * 24;
         }
