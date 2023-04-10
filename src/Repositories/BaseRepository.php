@@ -15,6 +15,7 @@ namespace JoyceZ\LaravelLib\Repositories;
 
 use Illuminate\Container\Container as Application;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use JoyceZ\LaravelLib\Exceptions\RepositoryException;
 use JoyceZ\LaravelLib\Repositories\Interfaces\BaseInterface;
@@ -444,6 +445,7 @@ abstract class BaseRepository implements BaseInterface
      * 批量更新多条数据，默认更新主键为id，若不是，就以数组第一个主键为key进行更熟数据
      * @param array $multipleData 二维数据
      * @return bool
+     * @throws RepositoryException
      */
     public function updateBatch(array $multipleData = []): bool
     {
@@ -480,8 +482,8 @@ abstract class BaseRepository implements BaseInterface
             $updateSql = rtrim($updateSql, ', ') . ' WHERE `' . $pkField . '` IN (' . $whereIn . ')';
             //预处理sql语句和对应绑定数据
             return DB::update($updateSql, $bindings) > 0 ? true : false;
-        } catch (\Exception $e) {
-            return false;
+        } catch (QueryException $e) {
+            throw new RepositoryException($e->getMessage());
         }
     }
 
