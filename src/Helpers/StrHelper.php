@@ -219,7 +219,7 @@ class StrHelper
 
     /**
      * 生成订单号
-     * @param string $prefix  前缀
+     * @param string $prefix 前缀
      * @return string
      */
     public static function orderNo(string $prefix = '')
@@ -371,5 +371,17 @@ class StrHelper
             return true;
         }
         return false;
+    }
+
+    /**
+     * 字符串"true"/"false"转成boolean布尔型
+     * @param $val
+     * @param bool $resultNull
+     * @return bool|mixed|null
+     */
+    public static function isTrue($val, $resultNull = false)
+    {
+        $boolVal = (is_string($val) ? filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : (bool)$val);
+        return ($boolVal === null && !$resultNull ? false : $boolVal);
     }
 }
