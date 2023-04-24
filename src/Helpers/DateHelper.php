@@ -443,7 +443,7 @@ class DateHelper
     }
 
     /**
-     * 一个月以周一开始，为7天
+     * 指定日期获取，所在月份周、年、季度
      * @param  $timestamp 时间
      * @param bool $isWeekMonday true ： 一个月以周一开始，为7天；false :一个月以周日开始
      * @return array
