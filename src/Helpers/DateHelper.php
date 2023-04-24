@@ -448,7 +448,7 @@ class DateHelper
      * @param bool $isWeekMonday true ： 一个月以周一开始，为7天；false :一个月以周日开始
      * @return array
      */
-    public function getWeekAndQInAMonth($timestamp, $isWeekMonday = true)
+    public static function getWeekAndQInAMonth($timestamp, $isWeekMonday = true)
     {
         $dt = Carbon::parse($timestamp);
         $dt->timezone = "Asia/Shanghai";
