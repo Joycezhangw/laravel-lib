@@ -13,6 +13,9 @@ declare (strict_types=1);
 
 namespace JoyceZ\LaravelLib\Helpers;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
+
 /**
  * 日期常用助手函数
  * Class DateHelper
@@ -103,8 +106,8 @@ class DateHelper
     public static function lastMonth()
     {
         $year = (int)date('Y');
-        $start = mktime(0, 0, 0, (int)date('m') - 1, 1,$year);
-        $end = mktime(23, 59, 59, (int)date('m') - 1, (int)date('t',$start), $year);
+        $start = mktime(0, 0, 0, (int)date('m') - 1, 1, $year);
+        $end = mktime(23, 59, 59, (int)date('m') - 1, (int)date('t', $start), $year);
 
         if (date('m', $start) != date('m', $end)) {
             $end -= 60 * 60 * 24;
@@ -126,7 +129,7 @@ class DateHelper
     {
         $year = (int)date('Y');
         $start = mktime(0, 0, 0, (int)date('m') - $month, 1, $year);
-        $end = mktime(23, 59, 59, (int)date('m') - $month, (int)date('t',$start), $year);
+        $end = mktime(23, 59, 59, (int)date('m') - $month, (int)date('t', $start), $year);
         if (date('m', $start) != date('m', $end)) {
             $end -= 60 * 60 * 24;
         }
@@ -400,6 +403,60 @@ class DateHelper
                 return false;
             }
         }
+    }
+
+    /**
+     * 指定年月，获取日期，并按每周分组。开始时间周一至周日排序
+     * @param $date
+     * @param string $format
+     * @return array
+     * @throws \Exception
+     */
+    public static function getWeekAMonth($date, $format = 'Y-m-d')
+    {
+        $time = strtotime($date . '-01');
+        $month = date('m', $time);
+        $carbon = new Carbon(new Carbon(date('Y-m-d', $time), 'Asia/Shanghai'));
+        $weeks = [];
+        while (intval($carbon->month) == intval($month)) {
+            $weeks[$carbon->weekNumberInMonth][] = $carbon->format($format);
+            $carbon->addDay();
+        }
+        return $weeks;
+    }
+
+    /**
+     * 指定年月，获取每周起止日期，并按每周分组
+     * @param $date
+     * @param string $format
+     * @return array
+     * @throws \Exception
+     */
+    public static function getWeekStartEndAMoth($date, $format = 'Y-m-d')
+    {
+        $weeks = self::getWeekAMonth($date, $format);
+        $weekData = [];
+        foreach ($weeks as $key => $item) {
+            $weekData[$key] = [Arr::first($item), Arr::last($item)];
+        }
+        return $weekData;
+    }
+
+    /**
+     * 一个月以周一开始，为7天
+     * @param  $timestamp 时间
+     * @param bool $isWeekMonday true ： 一个月以周一开始，为7天；false :一个月以周日开始
+     * @return array
+     */
+    public function getWeekAndQInAMonth($timestamp, $isWeekMonday = true)
+    {
+        $dt = Carbon::parse($timestamp);
+        $dt->timezone = "Asia/Shanghai";
+        return [
+            'week' => $isWeekMonday ? $dt->weekNumberInMonth : $dt->weekOfMonth,
+            'year' => $dt->year,
+            'quarter' => intval(($dt->month - 1) / 3 + 1)
+        ];
     }
 
 }
