@@ -36,7 +36,7 @@ class Captcha implements CaptchaContract
         'captchaSalt' => 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789',
         //长度
         'codeLen' => 4,
-        //狂赌
+        //宽度
         'width' => 130,
         //高度
         'height' => 50,
