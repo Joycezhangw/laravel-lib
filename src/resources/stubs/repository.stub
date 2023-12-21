@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace $NAMESPACE$
 
 use JoyceZ\LaravelLib\Repositories\BaseRepository;
-use $INTERFACES$;
 use $MODEL$;
 
 /**
@@ -15,7 +14,7 @@ use $MODEL$;
  * Class $CLASS$Repo
  * @package $NAMESPACE$
  */
-class $CLASS$Repo extends BaseRepository implements I$CLASS$
+class $CLASS$Repo extends BaseRepository
 {
 
     /**

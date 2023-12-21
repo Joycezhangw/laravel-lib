@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 use JoyceZ\LaravelLib\Exceptions\FileAlreadyExistsException;
 use JoyceZ\LaravelLib\Generators\ModelGenerator;
 use JoyceZ\LaravelLib\Generators\RepositoryGenerator;
-use JoyceZ\LaravelLib\Generators\RepositoryInterfaceGenerator;
+//use JoyceZ\LaravelLib\Generators\RepositoryInterfaceGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
@@ -55,9 +55,9 @@ class MakeRepositoryCommand extends Command
             'name' => $this->argument('name'),
         ]);
 
-        $repositoryInterfaceGenerator = new RepositoryInterfaceGenerator([
-            'name' => $this->argument('name'),
-        ]);
+//        $repositoryInterfaceGenerator = new RepositoryInterfaceGenerator([
+//            'name' => $this->argument('name'),
+//        ]);
         //model use
         $model = $modelGenerator->getRootNamespace() . '\\' . $modelGenerator->getName();
         $model = str_replace([
@@ -65,19 +65,19 @@ class MakeRepositoryCommand extends Command
             '/'
         ], '\\', $model . 'Model');
         //interfaces use
-        $interfaces = $repositoryInterfaceGenerator->getRootNamespace() . '\\' . implode('/', $repositoryInterfaceGenerator->resetSegments());
-        $interfaces = str_replace([
-            "\\",
-            '/'
-        ], '\\', $interfaces);
+//        $interfaces = $repositoryInterfaceGenerator->getRootNamespace() . '\\' . implode('/', $repositoryInterfaceGenerator->resetSegments());
+//        $interfaces = str_replace([
+//            "\\",
+//            '/'
+//        ], '\\', $interfaces);
         try {
             $modelGenerator->run();
             $this->info("Model created successfully.");
-            $repositoryInterfaceGenerator->run();
-            $this->info("Repository Interface created successfully.");
+//            $repositoryInterfaceGenerator->run();
+//            $this->info("Repository Interface created successfully.");
             (new RepositoryGenerator([
                 'name' => $this->argument('name'),
-                'interfaces' => $interfaces,
+//                'interfaces' => $interfaces,
                 'model' => $model
             ]))->run();
             $this->info("Repository created successfully.");
@@ -103,6 +103,4 @@ class MakeRepositoryCommand extends Command
     {
         return [];
     }
-
-
 }
