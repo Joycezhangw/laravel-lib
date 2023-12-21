@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace $NAMESPACE$
 
-use Illuminate\Database\Eloquent\Model;
+use JoyceZ\LaravelLib\Model\BaseModel;
 
 /**
  * 请说明具体哪块业务的 Eloquent ORM
@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class $CLASS$Model
  * @package $NAMESPACE$
  */
-class $CLASS$Model extends Model
+class $CLASS$Model extends BaseModel
 {
     /**
      * 表名
