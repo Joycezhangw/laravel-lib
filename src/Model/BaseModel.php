@@ -2,11 +2,11 @@
 
 namespace JoyceZ\LaravelLib\Model;
 
-
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
-class BaseModel extends Model
+abstract class BaseModel extends Model
 {
     /**
      * 重写日期序列化
