@@ -18,10 +18,10 @@ use Illuminate\Support\Carbon;
 
 /**
  * 日期常用助手函数
- * Class DateHelper
+ * Class TimeHelper
  * @package JoyceZ\LaravelLib\Helpers
  */
-class DateHelper
+class TimeHelper
 {
     /**
      * 获取今日开始时间戳和结束时间戳
@@ -30,9 +30,10 @@ class DateHelper
      */
     public static function today()
     {
+        list($y, $m, $d) = explode('-', date('Y-m-d'));
         return [
-            'start' => mktime(0, 0, 0, (int)date('m'), (int)date('d'), (int)date('Y')),
-            'end' => mktime(0, 0, 0, (int)date('m'), (int)date('d') + 1, (int)date('Y')) - 1,
+            mktime(0, 0, 0, $m, $d, $y),
+            mktime(23, 59, 59, $m, $d, $y)
         ];
     }
 
@@ -43,9 +44,10 @@ class DateHelper
      */
     public static function yesterday()
     {
+        $yesterday = date('d') - 1;
         return [
-            'start' => mktime(0, 0, 0, (int)date('m'), (int)date('d') - 1, (int)date('Y')),
-            'end' => mktime(0, 0, 0, (int)date('m'), (int)date('d'), (int)date('Y')) - 1,
+            mktime(0, 0, 0, date('m'), $yesterday, date('Y')),
+            mktime(23, 59, 59, date('m'), $yesterday, date('Y'))
         ];
     }
 
@@ -55,15 +57,11 @@ class DateHelper
      */
     public static function week()
     {
-        $length = 0;
-        // 星期天直接返回上星期，因为计算周围 星期一到星期天，如果不想直接去掉
-        if (date('w') == 0) {
-            $length = 7;
-        }
-
+        list($y, $m, $d, $w) = explode('-', date('Y-m-d-w'));
+        if ($w == 0) $w = 7;
         return [
-            'start' => mktime(0, 0, 0, (int)date('m'), (int)date('d') - (int)date('w') + 1 - $length, (int)date('Y')),
-            'end' => mktime(23, 59, 59, (int)date('m'), (int)date('d') - (int)date('w') + 7 - $length, (int)date('Y')),
+            mktime(0, 0, 0, $m, $d - $w + 1, $y),
+            mktime(23, 59, 59, $m, $d - $w + 7, $y)
         ];
     }
 
@@ -74,14 +72,10 @@ class DateHelper
      */
     public static function lastWeek()
     {
-        $length = 7;
-        // 星期天直接返回上星期，因为计算周围 星期一到星期天，如果不想直接去掉
-        if (date('w') == 0) {
-            $length = 14;
-        }
+        $timestamp = time();
         return [
-            'start' => mktime(0, 0, 0, (int)date('m'), (int)date('d') - (int)date('w') + 1 - $length, (int)date('Y')),
-            'end' => mktime(23, 59, 59, (int)date('m'), (int)date('d') - (int)date('w') + 7 - $length, (int)date('Y')),
+            strtotime(date('Y-m-d', strtotime("last week Monday", $timestamp))),
+            strtotime(date('Y-m-d', strtotime("last week Sunday", $timestamp))) + 24 * 3600 - 1
         ];
     }
 
@@ -92,9 +86,10 @@ class DateHelper
      */
     public static function thisMonth()
     {
+        list($y, $m, $t) = explode('-', date('Y-m-t'));
         return [
-            'start' => mktime(0, 0, 0, (int)date('m'), 1, (int)date('Y')),
-            'end' => mktime(23, 59, 59, (int)date('m'), (int)date('t'), (int)date('Y')),
+            mktime(0, 0, 0, $m, 1, $y),
+            mktime(23, 59, 59, $m, $t, $y)
         ];
     }
 
@@ -105,18 +100,12 @@ class DateHelper
      */
     public static function lastMonth()
     {
-        $year = (int)date('Y');
-        $start = mktime(0, 0, 0, (int)date('m') - 1, 1, $year);
-        $end = mktime(23, 59, 59, (int)date('m') - 1, (int)date('t', $start), $year);
+        $y = date('Y');
+        $m = date('m');
+        $begin = mktime(0, 0, 0, $m - 1, 1, $y);
+        $end = mktime(23, 59, 59, $m - 1, date('t', $begin), $y);
 
-        if (date('m', $start) != date('m', $end)) {
-            $end -= 60 * 60 * 24;
-        }
-
-        return [
-            'start' => $start,
-            'end' => $end,
-        ];
+        return [$begin, $end];
     }
 
     /**
@@ -140,6 +129,99 @@ class DateHelper
     }
 
     /**
+     * 返回今年开始和结束的时间戳
+     *
+     * @return array
+     */
+    public static function year()
+    {
+        $y = date('Y');
+        return [
+            mktime(0, 0, 0, 1, 1, $y),
+            mktime(23, 59, 59, 12, 31, $y)
+        ];
+    }
+
+    /**
+     * 返回去年开始和结束的时间戳
+     *
+     * @return array
+     */
+    public static function lastYear()
+    {
+        $year = date('Y') - 1;
+        return [
+            mktime(0, 0, 0, 1, 1, $year),
+            mktime(23, 59, 59, 12, 31, $year)
+        ];
+    }
+
+    /**
+     * 获取几天前零点到现在/昨日结束的时间戳
+     *
+     * @param int $day 天数
+     * @param bool $now 返回现在或者昨天结束时间戳
+     * @return array
+     */
+    public static function dayToNow($day = 1, $now = true)
+    {
+        $end = time();
+        if (!$now) {
+            list($foo, $end) = self::yesterday();
+        }
+        return [
+            mktime(0, 0, 0, date('m'), date('d') - $day, date('Y')),
+            $end
+        ];
+    }
+
+    /**
+     * 返回几天前的时间戳
+     *
+     * @param int $day
+     * @return int
+     */
+    public static function daysAgo($day = 1)
+    {
+        $nowTime = time();
+        return $nowTime - self::daysToSecond($day);
+    }
+
+    /**
+     * 返回几天后的时间戳
+     *
+     * @param int $day
+     * @return int
+     */
+    public static function daysAfter($day = 1, $nowTime = 0)
+    {
+        $nowTime = $nowTime ?: time();
+        return $nowTime + self::daysToSecond($day);
+    }
+
+    /**
+     * 天数转换成秒数
+     *
+     * @param int $day
+     * @return int
+     */
+    public static function daysToSecond($day = 1)
+    {
+        return $day * 86400;
+    }
+
+    /**
+     * 周数转换成秒数
+     *
+     * @param int $week
+     * @return int
+     */
+    public static function weekToSecond($week = 1)
+    {
+        return self::daysToSecond() * 7 * $week;
+    }
+
+    /**
      * 某年
      * @param $year
      * @return array
@@ -154,8 +236,8 @@ class DateHelper
         $end_time = date('Y-m-t H:i:s', strtotime($end_month));
 
         return [
-            'start' => strtotime($start_time),
-            'end' => strtotime($end_time)
+            strtotime($start_time),
+            strtotime($end_time)
         ];
     }
 
@@ -172,8 +254,8 @@ class DateHelper
         $month = $month == 0 ? (int)date('m') : $month;
         $day = date('t', strtotime($year . '-' . $month));
         return [
-            "start" => strtotime($year . '-' . $month),
-            "end" => mktime(23, 59, 59, $month, (int)$day, (int)$year)
+            strtotime($year . '-' . $month),
+            mktime(23, 59, 59, $month, (int)$day, (int)$year)
         ];
     }
 
