@@ -95,6 +95,10 @@ abstract class BaseRepository implements BaseInterface
         $this->makeModel();
     }
 
+    public function lists($column, $key = null)
+    {
+        $this->applyConditions();
+    }
 
     /**
      * 根据主键查询
@@ -356,9 +360,10 @@ abstract class BaseRepository implements BaseInterface
      */
     public function create(array $attributes)
     {
-        $result = $this->model->create($attributes);
+        $model = $this->model->newInstance($attributes);
+        $model->save();
         $this->resetModel();
-        return $result;
+        return $model;
     }
 
     /**
@@ -386,10 +391,13 @@ abstract class BaseRepository implements BaseInterface
      */
     public function updateById(array $attributes, int $id)
     {
-        $model = $this->model->find($id);
-        $result = $model->update($attributes);
+        $model = $this->model->findOrFail($id);
+
+        $model->fill($attributes);
+        $model->save();
+
         $this->resetModel();
-        return $result;
+        return $model;
     }
 
     /**
@@ -498,8 +506,8 @@ abstract class BaseRepository implements BaseInterface
     public function deleteById(int $id)
     {
         $model = $this->find($id);
-        $result = $model->delete();
         $this->resetModel();
+        $result = $model->delete();
         return $result;
 
     }
@@ -885,7 +893,7 @@ abstract class BaseRepository implements BaseInterface
         DB::commit();
     }
 
-    
+
     /**
      * 打印sql语句
      * @param Closure $callback
@@ -902,6 +910,16 @@ abstract class BaseRepository implements BaseInterface
         } catch (QueryException $exception) {
             throw new RepositoryException($exception->getMessage());
         }
+    }
+
+    /**
+     * @param $method
+     * @param $arguments
+     * @return mixed
+     */
+    public function __call($method, $arguments)
+    {
+        return call_user_func_array([$this->model, $method], $arguments);
     }
 
 }
