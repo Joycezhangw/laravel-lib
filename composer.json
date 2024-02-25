@@ -1,7 +1,7 @@
 {
-  "name": "landao/laravellib",
+  "name": "joycezhang/laravellib",
   "type": "library",
-  "description": "Laravel 6|7|8|9 Repository,enum,model ",
+  "description": "Laravel 6|7|8|9|10 Repository,enum,model ",
   "keywords": [
     "laravel",
     "repository",
@@ -12,14 +12,15 @@
   ],
   "require": {
     "php": "^7.2 || ^8.0",
-    "illuminate/http": "~6.0|~7.0|^8.0|^9.0",
-    "illuminate/config": "~6.0|~7.0|^8.0|^9.0",
-    "illuminate/support": "~6.0|~7.0|^8.0|^9.0",
-    "illuminate/database": "~6.0|~7.0|^8.0|^9.0",
-    "illuminate/pagination": "~6.0|~7.0|^8.0|^9.0",
-    "illuminate/console": "~6.0|~7.0|^8.0|^9.0",
-    "illuminate/filesystem": "~6.0|~7.0|^8.0|^9.0",
-    "illuminate/validation": "~6.0|~7.0|^8.0|^9.0"
+    "illuminate/support": "^8.0|^9.0|^10.0",
+    "illuminate/database": "^8.0|^9.0|^10.0",
+    "illuminate/cache": "^8.0|^9.0|^10.0",
+    "illuminate/http": "^8.0|^9.0|^10.0",
+    "illuminate/config": "^8.0|^9.0|^10.0",
+    "illuminate/pagination": "^8.0|^9.0|^10.0",
+    "illuminate/console": "^8.0|^9.0|^10.0",
+    "illuminate/filesystem": "^8.0|^9.0|^10.0",
+    "illuminate/validation": "^8.0|^9.0|^10.0"
   },
   "license": "MIT",
   "authors": [
