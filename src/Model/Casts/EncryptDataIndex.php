@@ -11,9 +11,15 @@ use JoyceZ\LaravelLib\Security\AopEncryptDataIndex;
  */
 class EncryptDataIndex implements CastsInboundAttributes
 {
-    public function __construct(protected string $indexType = '')
-    {
+    /**
+     * 加密类型，分别为：nick,phone,idCard
+     * @var mixed|string
+     */
+    protected $indexType;
 
+    public function __construct($indexType = '')
+    {
+        $this->indexType = $indexType;
     }
 
     /**
@@ -24,7 +30,7 @@ class EncryptDataIndex implements CastsInboundAttributes
      * @param array $attributes
      * @return string
      */
-    public function set(Model $model, string $key, mixed $value, array $attributes): string
+    public function set($model, string $key, $value, array $attributes): string
     {
         if (trim($value) == '') {
             return "";
