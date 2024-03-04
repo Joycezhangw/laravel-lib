@@ -95,11 +95,6 @@ abstract class BaseRepository implements BaseInterface
         $this->makeModel();
     }
 
-    public function lists($column, $key = null)
-    {
-        $this->applyConditions();
-    }
-
     /**
      * 根据主键查询
      * @param int | string $id 组键 id
