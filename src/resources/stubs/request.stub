@@ -17,7 +17,7 @@ class $CLASS$Request extends BaseRequest
      *  定义针对 Controller->store( )的验证规则
      * @return array
      */
-    public function getRulesByStore()
+    public function getRulesByStore(): array
     {
         return [
 
@@ -28,21 +28,10 @@ class $CLASS$Request extends BaseRequest
      *  定义针对 Controller->update( )的验证规则
      * @return array
      */
-    public function getRulesByUpdate()
+    public function getRulesByUpdate(): array
     {
         return [
 
-        ];
-    }
-
-    /**
-     * 定义针对 Controller->delete( )的验证规则
-     *
-     * @return array
-     */
-    public function getRulesByDelete()
-    {
-        return [
         ];
     }
 
@@ -50,7 +39,7 @@ class $CLASS$Request extends BaseRequest
      * 统一定义验证规则的自定义错误消息。
      * @return array
      */
-    public function messages()
+    public function messages(): array
     {
         return [
 
