@@ -2,7 +2,7 @@
 
 return [
     'passport' => [
-        'check_captcha_cache_key' => 'captchaUniqId',
+        'check_captcha_cache_key' => 'captcha_uniq_id',
         'password_salt' => env('LANDAO_PASSPORT_PASSWORD_SALT', env('APP_KEY'))
     ],
     'security' => [
