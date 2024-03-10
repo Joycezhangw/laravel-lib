@@ -34,4 +34,26 @@ class ResultHelper
         $ret['data'] = $data;
         return $ret;
     }
+
+    /**
+     * 返回错误信息
+     * @param string $msg
+     * @return array
+     */
+    public static function error(string $msg = 'error'): array
+    {
+        return self::returnFormat($msg, self::CODE_WARNING);
+    }
+
+    /**
+     * 返回成功信息
+     * @param string $msg
+     * @param array $data
+     * @return array
+     */
+    public static function success(string $msg = 'success', array $data = []): array
+    {
+        return self::returnFormat($msg, self::CODE_SUCCESS, $data);
+    }
+
 }
