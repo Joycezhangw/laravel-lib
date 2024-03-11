@@ -53,10 +53,4 @@ abstract class BaseRequest extends FormRequest
             'message' => $validator->errors()->first()
         ]));
     }
-
-    /**
-     * 验证错误信息
-     * @return array
-     */
-    abstract public function messages(): array;
 }
