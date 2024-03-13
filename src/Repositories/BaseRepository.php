@@ -399,16 +399,18 @@ abstract class BaseRepository implements BaseInterface
      * 根据指定条件更新数据，批量更新
      * @param array $condition 更新条件
      * @param array $attributes 要更新的字段
-     * @return bool|mixed
+     * @return mixed
      * @throws RepositoryException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function updateByWhere(array $condition, array $attributes)
     {
         $this->applyConditions($condition);
-        $result = $this->model->update($attributes);
+        $model = $this->model->firstOrFail();
+        $model->fill($attributes);
+        $model->save();
         $this->resetModel();
-        return $result;
+        return $model;
     }
 
     /**
