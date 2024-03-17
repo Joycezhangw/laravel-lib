@@ -405,8 +405,7 @@ abstract class BaseRepository implements BaseInterface
      */
     public function updateByWhere(array $condition, array $attributes)
     {
-        $this->applyConditions($condition);
-        $model = $this->model->firstOrFail();
+        $model = $this->model->where($condition)->firstOrFail();
         $model->fill($attributes);
         $model->save();
         $this->resetModel();
@@ -424,7 +423,7 @@ abstract class BaseRepository implements BaseInterface
      */
     public function updateFieldById(int $id, string $filedName, string $fieldValue)
     {
-        $model = $this->model->find($id);
+        $model = $this->model->findOrFail($id);
         $model->$filedName = $fieldValue;
         $result = $model->save();
         $this->resetModel();
