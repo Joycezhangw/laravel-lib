@@ -102,7 +102,7 @@ interface BaseInterface
      * @param int $id 主键id
      * @return mixed
      */
-    public function getByPkId(int $id);
+    public function getInfoById(int $id);
 
     /**
      * 根据条件，获取一条指定字段数据

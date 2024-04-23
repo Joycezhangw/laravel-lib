@@ -226,7 +226,7 @@ abstract class BaseRepository implements BaseInterface
      * @param int $id 主键id
      * @return mixed
      */
-    public function getByPkId(int $id)
+    public function getInfoById(int $id)
     {
         return $this->model->find($id);
     }
