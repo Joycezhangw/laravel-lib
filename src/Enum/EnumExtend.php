@@ -70,8 +70,8 @@ trait EnumExtend
     public static function includeAll(array $names): bool
     {
         $enums = self::getKeys();
-        foreach ($enums as $enum) {
-            if (!in_array($names, $enums)) {
+        foreach ($names as $name) {
+            if (!in_array($name, $enums)) {
                 return false;
             }
         }
