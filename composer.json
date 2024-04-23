@@ -11,7 +11,7 @@
     "enum"
   ],
   "require": {
-    "php": "^7.2 || ^8.0",
+    "php": "^7.2|^8.1",
     "illuminate/support": "^8.0|^9.0|^10.0",
     "illuminate/database": "^8.0|^9.0|^10.0",
     "illuminate/cache": "^8.0|^9.0|^10.0",
