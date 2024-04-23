@@ -102,8 +102,8 @@ class TimeHelper
     {
         $y = date('Y');
         $m = date('m');
-        $begin = mktime(0, 0, 0, $m - 1, 1, $y);
-        $end = mktime(23, 59, 59, $m - 1, date('t', $begin), $y);
+        $begin = mktime(0, 0, 0, $m - 1, 1, (int)$y);
+        $end = mktime(23, 59, 59, $m - 1, (int)date('t', $begin), (int)$y);
 
         return [$begin, $end];
     }
@@ -137,8 +137,8 @@ class TimeHelper
     {
         $y = date('Y');
         return [
-            mktime(0, 0, 0, 1, 1, $y),
-            mktime(23, 59, 59, 12, 31, $y)
+            mktime(0, 0, 0, 1, 1, (int)$y),
+            mktime(23, 59, 59, 12, 31, (int)$y)
         ];
     }
 
@@ -170,7 +170,7 @@ class TimeHelper
             list($foo, $end) = self::yesterday();
         }
         return [
-            mktime(0, 0, 0, date('m'), date('d') - $day, date('Y')),
+            mktime(0, 0, 0, (int)date('m'), date('d') - $day, (int)date('Y')),
             $end
         ];
     }
